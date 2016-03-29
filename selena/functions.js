@@ -34,8 +34,33 @@ fn.login = function(email, pass) {
     .click(".login-button")
 };
 
+fn.logout = function() {
+    return this
+    .circleListOpen()
+    .click(".logout-button")
+        .waitForExist(".login-button", TIMEOUT)
+};
 
+fn.circleListOpen = function() {
+    return this
+    .click(".table-create")
+    .click("[role='circlesButton']")
+        .waitForExist("[role='circleCreateButton']", TIMEOUT)
+}
 
+fn.circleSettingsOpen = function(circleName) {
+    return this
+    .circleListOpen()
+        .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]")
+/*            .then(function(isExisting) {
+                    console.log(" " + isExisting, "Круг " + circleName + " существует");
+            })*/
+    .click("//*[@role='circleName'][contains(text(),'" + circleName + "')]")
+        .waitForExist("[role='role']", TIMEOUT)
+/*            .then(function(isExisting) {
+                    console.log(" " + isExisting, "Открытие параметров круга " + circleName);
+            })*/
+}
 
  
 // client.addCommand("sessionEndAll", function() {
