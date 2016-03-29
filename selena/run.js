@@ -80,6 +80,7 @@ client.addCommand("sendResults", function(){
 // Мы можем не просто добавлять подряд, а в сложном порядке. Сначала добавляем в массив, а уже потом ставим в некоторм порядке в колстек.
 // Modules
 clientExtended.addModule(client, require("./modules/login.module"));  // checkLogin
+clientExtended.addModule(client, require("./modules/circle.module"));  // checkCircle
 
 
 
