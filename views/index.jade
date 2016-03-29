@@ -1,0 +1,34 @@
+
+html
+  head
+    link(
+      rel="stylesheet"
+      href='css/style.css'
+    ) 
+    script(src='js/jq.js')
+    script(src='js/main.js')
+  body
+    p Test runner v 0.0.1
+    div(
+      class="url-select"
+    )
+      label(
+        for="url"
+      ) Url
+      select(
+        name="url" 
+        id="url"
+      )
+        option(value="http://artyom.task.dev-lds.ru/") artyom.task.dev-lds.ru
+        option(value="http://tm.dev-lds.ru/") tm.dev-lds.ru
+        option(value="http://tm.hub-head.com/") tm.hub-head.com 
+
+    input(
+      type="button" 
+      id="submit" 
+      value="RUN" 
+      onclick="run()"
+    )
+    div(
+      class="results"
+    )
