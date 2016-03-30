@@ -1,5 +1,15 @@
 var selena = require("../clientExtended");
 
+var LOGIN1 = 'vadim+0001@levelup.ru',
+    PASS = '123123',
+    CIRCLE1 = 'CIRCLE1',
+    CIRCLE2 = 'CIRCLE2',
+    TIMEOUT = 4000,
+    circleNameBefore = 'СircleNameBefore',
+    circleNameAfter = 'circleNameAfter'
+;
+
+
 // Test module
 testModule = {
     name : "checkCircle",
@@ -32,21 +42,17 @@ testModule.tests.circleCreateNew = {
             .circleListOpen()
             .click("[role='circleCreateButton']")
                 .waitForVisible("[role='newCircleName']", TIMEOUT)
-                    .then(function(isExisting) {
-                            console.log(" " + isExisting, "Форма создания нового круга открылась");
-                        })
+                    .then(
+                        function(){selena.regActionResult("Форма создания нового круга открылась", 1)},
+                        function(e){selena.regActionResult(e.message, 0, false)}
+                    )
             .setValue("[role='newCircleName']", circleName)    
             .click("[role='newCircleSave']")
                 .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
-                    .then(function (isExisting) {
-                            console.log(" " + isExisting, "Круг " + circleName + " создан");
-                    })
-
-
-                .then(
-                    function(){selena.regActionResult("Wait for wrong type message", 1)},
-                    function(){selena.regActionResult("Wait for wrong type message", 0)}
-                );
+                    .then(
+                        function(){selena.regActionResult("Круг " + circleName + " создан", 1)},
+                        function(e){selena.regActionResult(e.message, 0, false)}
+                    );
     },
     message : "Создание круга"
 }
@@ -62,14 +68,10 @@ testModule.tests.circleRename = {
             .keys(["Escape"])
             .circleListOpen()
                 .waitForExist("//*[@role='circleName'][contains(text(),'" + circleNameAfter + "')]", TIMEOUT)
-                    .then(function(isExisting) {
-                            console.log(" " + isExisting, "Круг переименован");
-                    })
-            
-                .then(
-                    function(){selena.regActionResult("Wait for wrong type message", 1)},
-                    function(){selena.regActionResult("Wait for wrong type message", 0)}
-                );
+                    .then(
+                        function(){selena.regActionResult("Круг " + СircleNameBefore + " переименован " + " в " + circleNameAfter, 1)},
+                        function(e){selena.regActionResult(e.message, 0, false)}
+                    );
     },
     message : "Переименование круга"
 }
@@ -82,16 +84,12 @@ testModule.tests.circleDelete = {
             .keys(["Space"])
             .circleListOpen()
                 .isExisting("//*[@role='circleName'][contains(text(),'" + circleName + "')]")
-                    .then(function(isExisting) {
-                            console.log("Круг", circleName, "удален", isExisting, "false = ok");
-                    })
-        
-                .then(
-                    function(){selena.regActionResult("Wait for wrong type message", 1)},
-                    function(){selena.regActionResult("Wait for wrong type message", 0)}
-                );
+                    .then(
+                        function(){selena.regActionResult("Круг " + circleName + " удален", 1)},
+                        function(e){selena.regActionResult(e.message, 0, false)}
+                    );
     },
-    message : "Переименование круга"
+    message : "Удаление круга"
 }
 
 
