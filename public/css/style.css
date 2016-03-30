@@ -31,6 +31,7 @@ body{
     cursor: pointer;
     margin-bottom: 4px;
     border-radius: 3px;
+    white-space: nowrap;
 }
 .block > .header.snap::after{
     content: "+";

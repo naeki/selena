@@ -13,23 +13,13 @@ testModule = {
     setup : function(){},
     clean : function(){},
 
-    testSetup : function(){
-        return this
-                .waitForExist("//*[contains(text(),'pack type')]").then(
-                    function(){selena.regActionResult("Wait for wrong type message", 1)},
-                    function(e){selena.regActionResult(e.message, 0, true)}
-                );
-    },
+    testSetup : function(){},
     testClean : function(){
         return this
             .waitForExist("//*[contains(text(),'or')]").then(
                     function(){selena.regActionResult("Wait for or message", 1)},
                     function(e){selena.regActionResult(e.message, 0, true)}
             )
-            .waitForExist("//*[contains(text(),'pack type')]").then(
-                    function(){selena.regActionResult("Wait for wrong type message", 1)},
-                    function(e){selena.regActionResult(e.message, 0, true)}
-                );
     },
 
     tests : {
@@ -55,6 +45,10 @@ testModule.tests.loginIncorrect = {
         return this
             .login(WRONGLOGINPASS, WRONGLOGINPASS)
                 .waitForExist("//*[contains(text(),'Не верный')]", TIMEOUT)
+                    .then(
+                        function(){selena.regActionResult("Wait for wrong type message", 1)}, 
+                        function(){selena.regActionResult("Wait for wrong type message", 0)}
+                    )
     },
     message : "Неверный логин или пароль"
 }

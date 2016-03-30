@@ -31,8 +31,12 @@ function Module(name, obj){
 	this.result = this.getResult();
 
 	this.el     = $("<div class='block'></div>");
-	this.header = $("<div result='"+ this.result +"' class='header snap'>"+ name +"</div>").appendTo(this.el);
-	this.body   = $("<div class='body'></div>").appendTo(this.el);
+	this.header = $("<div result='"+ this.result +"' class='header'>"+ name +"</div>").appendTo(this.el);
+
+	if (this.data.result == "skip") return this;
+
+	this.header.addClass("snap");
+	this.body = $("<div class='body'></div>").appendTo(this.el);
 
 
 	// Rendering Module Setup
@@ -54,6 +58,8 @@ function Module(name, obj){
 
 Module.prototype = {
 	getResult : function(){
+		if (this.data.result === "skip") return this.data.result;
+
 		var result = true;
 
 		result = result 

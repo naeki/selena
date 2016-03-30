@@ -50,22 +50,26 @@ var options = {
 
 // Service
 var client = webdriverio.remote(options);
-var clientExtended = require("./clientExtended");
+var selena = require("./clientExtended");
 var results = require("./results");
 
-client.modulesCall = null;  //Modules callstack - объявляется просто чтобы знать, что такой есть
+//client.modulesCall = null;  //Modules callstack - объявляется просто чтобы знать, что такой есть
 
 var fn = require("./functions");
 for (var i in fn){client.addCommand(i, fn[i])} // можно переделать, где-то там создавать команды сразу
 
 
 
+
+
+
 // Global Setup & Clean
-clientExtended.addFunction(client, "globalSetup", function(){
+selena.addFunction(client, "globalSetup", function(){
     return this.sessionStart();
 }, true);
 
-clientExtended.addFunction(client, "globalClean", function(){
+selena.addFunction(client, "globalClean", function(){
+    console.log("globalClean")
     return this.sessionEnd();
 }, true);
 
@@ -79,8 +83,24 @@ client.addCommand("sendResults", function(){
 
 // Мы можем не просто добавлять подряд, а в сложном порядке. Сначала добавляем в массив, а уже потом ставим в некоторм порядке в колстек.
 // Modules
-clientExtended.addModule(client, require("./modules/login.module"));  // checkLogin
-clientExtended.addModule(client, require("./modules/circle.module"));  // checkCircle
+selena.addModule(client, require("./modules/login.module"));  // checkLogin
+selena.addModule(client, require("./modules/circle.module"));  // checkCircle
+
+
+
+client.addCommand("modulesCall", function(){
+    function run(name){
+        if (!selena.process) selena.process = this;
+        selena.process[name].call(this);
+    }
+
+    for(var i=0; selena.modulesCall[i]; i++){
+        results["tests"] = selena.modulesCall;
+        run.call(this, selena.modulesCall[i]);
+    }
+    
+    return selena.process;
+}, true);
 
 
 
@@ -88,7 +108,9 @@ client
     .globalSetup().then(
         function(){
             results["setup"] = 1;
-            return client.modulesCall();    
+            return this
+                .checkLogin()
+                .checkCircle();    
         },
         function(err){
             results["setup"] = 0;
@@ -101,5 +123,5 @@ client
         function(){
             results["clean"] = 0;
         }
-    ).
-    sendResults();
+    )
+    .sendResults();
