@@ -44,14 +44,14 @@ testModule.tests.circleCreateNew = {
                 .waitForVisible("[role='newCircleName']", TIMEOUT)
                     .then(
                         function(){selena.regActionResult("Форма создания нового круга открылась", 1)},
-                        function(e){selena.regActionResult(e.message, 0, false)}
+                        function(e){selena.regActionResult(e.message, 0)}
                     )
             .setValue("[role='newCircleName']", circleName)    
             .click("[role='newCircleSave']")
                 .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
                     .then(
                         function(){selena.regActionResult("Круг " + circleName + " создан", 1)},
-                        function(e){selena.regActionResult(e.message, 0, false)}
+                        function(e){selena.regActionResult(e.message, 0)}
                     );
     },
     message : "Создание круга"
@@ -70,7 +70,7 @@ testModule.tests.circleRename = {
                 .waitForExist("//*[@role='circleName'][contains(text(),'" + circleNameAfter + "')]", TIMEOUT)
                     .then(
                         function(){selena.regActionResult("Круг " + СircleNameBefore + " переименован " + " в " + circleNameAfter, 1)},
-                        function(e){selena.regActionResult(e.message, 0, false)}
+                        function(e){selena.regActionResult(e.message, 0)}
                     );
     },
     message : "Переименование круга"
@@ -86,7 +86,7 @@ testModule.tests.circleDelete = {
                 .isExisting("//*[@role='circleName'][contains(text(),'" + circleName + "')]")
                     .then(
                         function(){selena.regActionResult("Круг " + circleName + " удален", 1)},
-                        function(e){selena.regActionResult(e.message, 0, false)}
+                        function(e){selena.regActionResult(e.message, 0)}
                     );
     },
     message : "Удаление круга"

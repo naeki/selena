@@ -101,37 +101,44 @@ selena.addTest = function(module, client, name, test){
             return client;
         }
 
+        client.addCommand("testCall", function(name){
+            // Указываем, что сейчас выполняется
+            if (selena.skip) {
+                return client;
+            }
+
+            selena.work = testResult;
+
+            // Вызываем выполнение теста
+            return test.call.apply(client, arguments)
+        }, true)
+
+
+
         return client
             .testSetup(name)
-            .then(
-                function(){
-                    // Указываем, что сейчас выполняется
-                    selena.work = testResult;
-
-                    if (selena.skip) {
-                        return client;
+                .then(
+                    function(){
+                        // Записываем результат выполнения сетапа
+                        selena.regActionResult(null, 1);
                     }
-
-                    // Записываем результат выполнения сетапа
-                    selena.regActionResult(null, 1);
-
-                    // Вызываем выполнение теста
-                    return test.call.apply(this, arguments)
-                        .then(
-                            // Записываем результат выполнения теста
-                            function(){
-                                testResult["result"] = 1;
-                            }, 
-                            function(err){
-                                selena.regActionResult(err.message, 0);
-                            }
-                        );
-
-                }.bind(this)
-            )   
+                )   
+            .testCall(name).then(
+                    function(){
+                        // Записываем результат выполнения теста
+                        selena.regActionResult(null, 1);
+                    },
+                    function(err){
+                        selena.regActionResult(err.message, 0);
+                    }
+                ) 
             .testClean(name).then(
                 function(){
-                    testResult["clean"].result = 1;
+                    selena.regActionResult(null, 1, false);
+                },
+                function(err){
+                    console.log(name, "clean end")
+                    selena.regActionResult(err.message, 0, true);
                 }
             )
     })
@@ -155,9 +162,16 @@ selena.addFunction = function(client, name, callback, rewrite){
 
 selena.regActionResult = function(message, result, skip){
     if (!selena.work) return;
-    if (!selena.work["actions"]) selena.work["actions"] = [];
 
-    if (message) selena.work["actions"].push({message: message, result: result});
+    if (message) {
+        console.log(message)
+
+        if (!selena.work["actions"]) 
+            selena.work["actions"] = [];
+
+        selena.work["actions"].push({message: message, result: result});
+        // console.log(selena.work, "work")
+    }
 
     selena.work.result = result in selena.work ? selena.work.result && result : result;
 
