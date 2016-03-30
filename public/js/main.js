@@ -37,6 +37,7 @@ function Module(name, obj){
 
 	this.header.addClass("snap");
 	this.body = $("<div class='body'></div>").appendTo(this.el);
+	if (!this.result && !Module.error) Module.error = openBlock(this.el);
 
 
 	// Rendering Module Setup
@@ -85,6 +86,7 @@ function Test(obj){
 	this.header = $("<div result='"+ this.result +"' class='header'>"+ this.data.message +"</div>").appendTo(this.el);
 
 	if (this.data.result == "skip") return this;
+	if (!this.result && !Test.error) Test.error = openBlock(this.el);
 
 
 
@@ -138,6 +140,8 @@ function ActionsBlock(name, data){
 	this.header = $("<div result='"+ this.result +"' class='header'>"+ name +"</div>").appendTo(this.el);
 
 	if (actions){
+		if (!this.result && !ActionsBlock.error) ActionsBlock.error = openBlock(this.el);
+
 		this.header.addClass("snap");
 		this.body = $("<div class='body'></div>").appendTo(this.el);
 
@@ -170,9 +174,16 @@ ActionsBlock.prototype = {
 
 $(document).on("click", ".header", function(e){
 	var viewed = $(e.target).parent(".block").hasClass("view");
-	$(e.target).parent(".block")[viewed ? "removeClass" : "addClass"]("view");
+	(viewed ? closeBlock : openBlock).call(this, $(e.target).parent(".block"));
 })
-
+function openBlock(el){
+	$(el).addClass("view");
+	return true;
+}
+function closeBlock(el){
+	$(el).removeClass("view");
+	return true;
+}
 
 
 // blockPrototype = {

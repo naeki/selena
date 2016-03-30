@@ -33,6 +33,10 @@ body{
     border-radius: 3px;
     white-space: nowrap;
 }
+.action{
+    white-space: normal;
+    height: auto;
+}
 .block > .header.snap::after{
     content: "+";
     height: 10px;
