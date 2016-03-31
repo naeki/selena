@@ -15,6 +15,10 @@ fn.sessionStart = function() {
         .windowHandleSize({width: 800, height: 1200})
         .windowHandlePosition({x: 0, y: 0})
         .waitForExist("[name='login']", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Открытие страницы " + env.url, 1)},
+                function(e){selena.regActionResult("Открытие страницы " + env.url + e.message, 0)}
+            )
 };
 
 fn.sessionEnd = function() {
@@ -29,8 +33,16 @@ fn.login = function(email, pass) {
     return this
     .setValue("[type='email']", email)
         .waitForValue("[type='email']", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Ввод " + email + " в поле email", 1)},
+                function(e){selena.regActionResult("Ввод " + email + " в поле email " + e.message, 0)}
+            )
     .setValue("[type='password']", pass)
         .waitForValue("[type='password']", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Ввод " + pass + " в поле password", 1)},
+                function(e){selena.regActionResult("Ввод " + pass + " в поле password " + e.message, 0)}
+            )
     .click(".login-button")
 };
 
@@ -39,31 +51,68 @@ fn.logout = function() {
     .circleListOpen()
     .click(".logout-button")
         .waitForExist(".login-button", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Логаут и появления формы авторизации", 1)},
+                function(e){selena.regActionResult("Логаут и появления формы авторизации " + e.message, 0)}
+            )
 };
 
 fn.circleListOpen = function() {
     return this
     .click("[role='circlesButton']")
         .waitForExist("[role='circleCreateButton']", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Открытие списка кругов", 1)},
+                function(e){selena.regActionResult("Открытие списка кругов " + e.message, 0)}
+            )
 }
 
 fn.circleSettingsOpen = function(circleName) {
     return this
-//    .circleListOpen()
-        /*.then(
-            function(){selena.regActionResult("Открытие настроек круга " + circleName, 1)},
-            function(e){selena.regActionResult("Открытие настроек круга " + e.message, 0)}
-        )*/
     .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
-/*            .then(function(isExisting) {
-                    console.log(" " + isExisting, "Круг " + circleName + " существует");
-            })*/
+        .then(
+            function(){selena.regActionResult("Проверка наличия круг " + circleName + " в списке кругов", 1)},
+            function(e){selena.regActionResult("Проверка наличия круг " + circleName + " в списке кругов" + e.message, 0)}
+        )
     .click("//*[@role='circleName'][contains(text(),'" + circleName + "')]")
         .waitForExist("[role='role']", TIMEOUT)
-/*            .then(function(isExisting) {
-                    console.log(" " + isExisting, "Открытие параметров круга " + circleName);
-            })*/
+            .then(
+                function(){selena.regActionResult("Открытие настроек круга " + circleName, 1)},
+                function(e){selena.regActionResult("Открытие настроек круга " + circleName + e.message, 0)}
+            )
 }
+
+/*
+fn.circleCreateNew = function() {
+    return this
+    .click("[role='circleCreateButton']")
+        .waitForVisible("[role='newCircleName']", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Открытие формы создания нового круга", 1)},
+                function(e){selena.regActionResult("Открытие формы создания нового круга " + e.message, 0)}
+            )
+    .setValue("[role='newCircleName']", circleName)    
+    .click("[role='newCircleSave']")
+        .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Круг " + circleName + " создан", 1)},
+                function(e){selena.regActionResult(e.message, 0)}
+            );
+}
+
+
+fn.circleDelete = function() {
+    return this
+    .click("[role='circleDelete']")
+    .keys(["Space"])
+    .circleListOpen()
+        .isExisting("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Круг " + circleName + " удален", 1)},
+                function(e){selena.regActionResult("Удаление круга " + e.message, 0)}
+            );
+}
+*/
 
  
 // client.addCommand("sessionEndAll", function() {

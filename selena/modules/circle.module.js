@@ -7,7 +7,7 @@ var LOGIN1 = 'vadim+0001@levelup.ru',
     TIMEOUT = 4000,
     circleName = 'Circle'+Date.now(),
     circleNameBefore = circleName,
-    circleNameAfter = 'circleNameAfter'
+    circleNameAfter = circleName+1
 ;
 
 
@@ -16,16 +16,20 @@ testModule = {
     name : "checkCircle",
     call : function(){
       return this
-        .circleCreateNew()
+        .circleCreateNew(circleName)
         .circleRename(circleNameBefore, circleNameAfter)
-        .circleDelete()
+        .circleDelete(circleNameAfter)
         ;  
     },
     setup : function(){
         return this
             .login(LOGIN1, PASS)
-                .waitForVisible("[role='circlesButton']", TIMEOUT)
-                    .pause(3000)
+                .waitForVisible("[role='mainButton']", TIMEOUT)
+                .pause(500)
+                    .then(
+                        function(){selena.regActionResult("Авторизация и открытие системы", 1)},
+                        function(e){selena.regActionResult("Авторизация и открытие системы " + e.message, 0)}
+                    );
     },
     clean : function(){
         return this
@@ -35,10 +39,6 @@ testModule = {
     testSetup : function(){
         return this
             .circleListOpen()
-                .then(
-                    function(){selena.regActionResult("Открытие списка кругов", 1)},
-                    function(e){selena.regActionResult("Открытие списка кругов " + e.message, 0)}
-                )
     },
     testClean : function(){},
 
@@ -47,7 +47,7 @@ testModule = {
 
 
 testModule.tests.circleCreateNew = {
-    call : function() {
+    call : function(circleName) {
         return this
             .click("[role='circleCreateButton']")
                 .waitForVisible("[role='newCircleName']", TIMEOUT)
@@ -59,8 +59,8 @@ testModule.tests.circleCreateNew = {
             .click("[role='newCircleSave']")
                 .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
                     .then(
-                        function(){selena.regActionResult("Круг " + circleName + " создан", 1)},
-                        function(e){selena.regActionResult(e.message, 0)}
+                        function(){selena.regActionResult("Создание круга " + circleName, 1)},
+                        function(e){selena.regActionResult("Создание круга " + circleName + e.message, 0)}
                     );
     },
     message : "Создание круга"
@@ -68,8 +68,6 @@ testModule.tests.circleCreateNew = {
 
 testModule.tests.circleRename = {
     call : function(circleNameBefore, circleNameAfter) {
-        // console.log("intest ", arguments)
-
         return this
             .circleSettingsOpen(circleNameBefore)
             .click("//*[@role='circleName'][contains(text(),'" + circleNameBefore + "')]")
@@ -80,15 +78,15 @@ testModule.tests.circleRename = {
             .circleListOpen()
                 .waitForExist("//*[@role='circleName'][contains(text(),'" + circleNameAfter + "')]", TIMEOUT)
                     .then(
-                        function(){selena.regActionResult("Круг " + circleNameBefore + " переименован " + " в " + circleNameAfter, 1)},
-                        function(e){selena.regActionResult("Переименование круга " + e.message, 0)}
+                        function(){selena.regActionResult("Проверка, что круг " + circleNameBefore + " переименован " + " в " + circleNameAfter, 1)},
+                        function(e){selena.regActionResult("Проверка, что круг " + circleNameBefore + " переименован " + " в " + circleNameAfter + e.message, 0)}
                     );
     },
     message : "Переименование круга"
 }
 
 testModule.tests.circleDelete = {
-    call : function() {
+    call : function(circleName) {
         return this
             .circleSettingsOpen(circleName)
             .click("[role='circleDelete']")
