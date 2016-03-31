@@ -78,12 +78,11 @@ fn.circleSettingsOpen = function(circleName) {
         .waitForExist("[role='role']", TIMEOUT)
             .then(
                 function(){selena.regActionResult("Открытие настроек круга " + circleName, 1)},
-                function(e){selena.regActionResult("Открытие настроек круга " + circleName + e.message, 0)}
+                function(e){selena.regActionResult("Открытие настроек круга " + circleName + " " + e.message, 0)}
             )
 }
 
-/*
-fn.circleCreateNew = function() {
+fn.circleCreateNew = function(circleName) {
     return this
     .click("[role='circleCreateButton']")
         .waitForVisible("[role='newCircleName']", TIMEOUT)
@@ -95,25 +94,23 @@ fn.circleCreateNew = function() {
     .click("[role='newCircleSave']")
         .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
             .then(
-                function(){selena.regActionResult("Круг " + circleName + " создан", 1)},
-                function(e){selena.regActionResult(e.message, 0)}
+                function(){selena.regActionResult("Создание круга " + circleName, 1)},
+                function(e){selena.regActionResult("Создание круга " + circleName + " " + e.message, 0)}
             );
 }
 
-
-fn.circleDelete = function() {
+fn.circleDelete = function(circleName) {
     return this
+    .circleSettingsOpen(circleName)
     .click("[role='circleDelete']")
     .keys(["Space"])
     .circleListOpen()
         .isExisting("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
             .then(
-                function(){selena.regActionResult("Круг " + circleName + " удален", 1)},
-                function(e){selena.regActionResult("Удаление круга " + e.message, 0)}
+                function(){selena.regActionResult("Удаление круга " + circleName + " ", 1)},
+                function(e){selena.regActionResult("Удаление круга " + circleName + " " + e.message, 0)}
             );
 }
-*/
-
  
 // client.addCommand("sessionEndAll", function() {
 //     console.log(" ");

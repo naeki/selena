@@ -16,9 +16,7 @@ testModule = {
     name : "checkCircle",
     call : function(){
       return this
-        .circleCreateNew(circleName)
         .circleRename(circleNameBefore, circleNameAfter)
-        .circleDelete(circleNameAfter)
         ;  
     },
     setup : function(){
@@ -29,7 +27,8 @@ testModule = {
                     .then(
                         function(){selena.regActionResult("Авторизация и открытие системы", 1)},
                         function(e){selena.regActionResult("Авторизация и открытие системы " + e.message, 0)}
-                    );
+                    )
+            ;
     },
     clean : function(){
         return this
@@ -39,14 +38,18 @@ testModule = {
     testSetup : function(){
         return this
             .circleListOpen()
+            .circleCreateNew(circleName)
     },
-    testClean : function(){},
+    testClean : function(){
+        return this
+            .circleDelete(circleNameAfter)
+    },
 
     tests : {}
 }
 
 
-testModule.tests.circleCreateNew = {
+/*testModule.tests.circleCreateNew = {
     call : function(circleName) {
         return this
             .click("[role='circleCreateButton']")
@@ -64,7 +67,7 @@ testModule.tests.circleCreateNew = {
                     );
     },
     message : "Создание круга"
-}
+}*/
 
 testModule.tests.circleRename = {
     call : function(circleNameBefore, circleNameAfter) {
@@ -78,14 +81,14 @@ testModule.tests.circleRename = {
             .circleListOpen()
                 .waitForExist("//*[@role='circleName'][contains(text(),'" + circleNameAfter + "')]", TIMEOUT)
                     .then(
-                        function(){selena.regActionResult("Проверка, что круг " + circleNameBefore + " переименован " + " в " + circleNameAfter, 1)},
-                        function(e){selena.regActionResult("Проверка, что круг " + circleNameBefore + " переименован " + " в " + circleNameAfter + e.message, 0)}
+                        function(){selena.regActionResult("Переименование круга " + circleNameBefore + " в " + circleNameAfter, 1)},
+                        function(e){selena.regActionResult("Переименование круга " + circleNameBefore + " в " + circleNameAfter + " " + e.message, 0)}
                     );
     },
     message : "Переименование круга"
 }
 
-testModule.tests.circleDelete = {
+/*testModule.tests.circleDelete = {
     call : function(circleName) {
         return this
             .circleSettingsOpen(circleName)
@@ -99,7 +102,7 @@ testModule.tests.circleDelete = {
                     );
     },
     message : "Удаление круга"
-}
+}*/
 
 
 
