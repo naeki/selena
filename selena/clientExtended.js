@@ -101,18 +101,19 @@ selena.addTest = function(module, client, name, test){
             return client;
         }
 
-        client.addCommand("testCall", function(name){
+        client.addCommand("testCall", function(){
             // Указываем, что сейчас выполняется
             if (selena.skip) {
                 return client;
             }
-
+            console.log("test call input")
             selena.work = testResult;
 
             // Вызываем выполнение теста
             return test.call.apply(client, arguments)
         }, true)
 
+        var args = arguments;
 
 
         return client
@@ -120,18 +121,22 @@ selena.addTest = function(module, client, name, test){
                 .then(
                     function(){
                         // Записываем результат выполнения сетапа
+                        console.log("setup output")
                         selena.regActionResult(null, 1);
+
+
+                        return this.testCall.apply(this, args).then(
+                            function(){
+                                // Записываем результат выполнения теста
+                                selena.regActionResult(null, 1);
+                            },
+                            function(err){
+                                selena.regActionResult(err.message, 0);
+                            }
+                        ) 
+
                     }
                 )   
-            .testCall(arguments).then(
-                    function(){
-                        // Записываем результат выполнения теста
-                        selena.regActionResult(null, 1);
-                    },
-                    function(err){
-                        selena.regActionResult(err.message, 0);
-                    }
-                ) 
             .testClean(name).then(
                 function(){
                     selena.regActionResult(null, 1, false);

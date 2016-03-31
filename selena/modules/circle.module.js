@@ -17,9 +17,7 @@ testModule = {
     call : function(){
       return this
         .circleCreateNew()
-      
         .circleRename(circleNameBefore, circleNameAfter)
-        
         .circleDelete()
         ;  
     },
@@ -70,7 +68,8 @@ testModule.tests.circleCreateNew = {
 
 testModule.tests.circleRename = {
     call : function(circleNameBefore, circleNameAfter) {
-        console.log(circleNameBefore, " ", circleNameAfter)
+        // console.log("intest ", arguments)
+
         return this
             .circleSettingsOpen(circleNameBefore)
             .click("//*[@role='circleName'][contains(text(),'" + circleNameBefore + "')]")
