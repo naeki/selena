@@ -112,20 +112,21 @@ selena.addTest = function(module, client, name, test){
             // Вызываем выполнение теста
             return test.call.apply(client, arguments)
         }, true)
+        
 
-        var args = arguments;
 
-
-        return client
+        var step1 = client
             .testSetup(name)
                 .then(
                     function(){
                         // Записываем результат выполнения сетапа
                         console.log("setup output")
                         selena.regActionResult(null, 1);
+                    }
+                );
 
-
-                        return this.testCall.apply(this, args).then(
+        return step1
+            .testCall.apply(step1, arguments).then(
                             function(){
                                 // Записываем результат выполнения теста
                                 selena.regActionResult(null, 1);
@@ -134,9 +135,6 @@ selena.addTest = function(module, client, name, test){
                                 selena.regActionResult(err.message, 0);
                             }
                         ) 
-
-                    }
-                )   
             .testClean(name).then(
                 function(){
                     selena.regActionResult(null, 1, false);
