@@ -14,13 +14,7 @@ testModule = {
     clean : function(){},
 
     testSetup : function(){},
-    testClean : function(){
-        return this
-            .waitForExist("//*[contains(text(),'or')]").then(
-                    function(){selena.regActionResult("Wait for or message", 1)},
-                    function(e){selena.regActionResult(e.message, 0, true)}
-            )
-    },
+    testClean : function(){},
 
     tests : {
         loginEmptyFields : {},
@@ -33,8 +27,10 @@ testModule.tests.loginEmptyFields = {
     call : function() {
         return this
             .login(PASS, PASS)
-            .waitForExist("//*[contains(text(),'wrong type')]").then(
-                    function(){selena.regActionResult("Wait for wrong type message", 1)}
+            .waitForExist("//*[contains(text(),'wrong type')]")
+                .then(
+                    function(){selena.regActionResult("Появление надписи Empty fields or wrong type", 1)}, 
+                    function(){selena.regActionResult("Появление надписи Empty fields or wrong type " + e.message, 0)}
                 );
     },
     message : "Попытка логина с пустыми полями"
@@ -46,9 +42,9 @@ testModule.tests.loginIncorrect = {
             .login(WRONGLOGINPASS, WRONGLOGINPASS)
                 .waitForExist("//*[contains(text(),'Не верный')]", TIMEOUT)
                     .then(
-                        function(){selena.regActionResult("Wait for wrong type message", 1)}, 
-                        function(){selena.regActionResult("Wait for wrong type message", 0)}
-                    )
+                        function(){selena.regActionResult("Появление надписи 'Не верный логин или пароль!' ", 1)}, 
+                        function(){selena.regActionResult("Появление надписи 'Не верный логин или пароль!' " + e.message, 0)}
+                    );
     },
     message : "Неверный логин или пароль"
 }
