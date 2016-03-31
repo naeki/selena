@@ -7,7 +7,7 @@ var LOGIN1 = 'vadim+0001@levelup.ru',
     TIMEOUT = 4000,
     circleName = 'Circle'+Date.now(),
     circleNameBefore = circleName,
-    circleNameAfter = 'circleNameAfter'
+    circleNameAfter = circleName+1
 ;
 
 

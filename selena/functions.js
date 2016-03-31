@@ -49,11 +49,6 @@ fn.circleListOpen = function() {
 
 fn.circleSettingsOpen = function(circleName) {
     return this
-//    .circleListOpen()
-        /*.then(
-            function(){selena.regActionResult("Открытие настроек круга " + circleName, 1)},
-            function(e){selena.regActionResult("Открытие настроек круга " + e.message, 0)}
-        )*/
     .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
 /*            .then(function(isExisting) {
                     console.log(" " + isExisting, "Круг " + circleName + " существует");
@@ -63,6 +58,36 @@ fn.circleSettingsOpen = function(circleName) {
 /*            .then(function(isExisting) {
                     console.log(" " + isExisting, "Открытие параметров круга " + circleName);
             })*/
+}
+
+fn.circleCreateNew = function() {
+    return this
+    .click("[role='circleCreateButton']")
+        .waitForVisible("[role='newCircleName']", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Открытие формы создания нового круга", 1)},
+                function(e){selena.regActionResult("Открытие формы создания нового круга " + e.message, 0)}
+            )
+    .setValue("[role='newCircleName']", circleName)    
+    .click("[role='newCircleSave']")
+        .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Круг " + circleName + " создан", 1)},
+                function(e){selena.regActionResult(e.message, 0)}
+            );
+}
+
+
+fn.circleDelete = function() {
+    return this
+    .click("[role='circleDelete']")
+    .keys(["Space"])
+    .circleListOpen()
+        .isExisting("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Круг " + circleName + " удален", 1)},
+                function(e){selena.regActionResult("Удаление круга " + e.message, 0)}
+            );
 }
 
  
