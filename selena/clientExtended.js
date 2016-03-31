@@ -123,7 +123,7 @@ selena.addTest = function(module, client, name, test){
                         selena.regActionResult(null, 1);
                     }
                 )   
-            .testCall(name).then(
+            .testCall(arguments).then(
                     function(){
                         // Записываем результат выполнения теста
                         selena.regActionResult(null, 1);

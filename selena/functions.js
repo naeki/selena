@@ -1,4 +1,4 @@
-
+var selena = require("./clientExtended");
 var fn = {};
 var env = process.env;
 // var env = require('./env');
@@ -43,15 +43,18 @@ fn.logout = function() {
 
 fn.circleListOpen = function() {
     return this
-    .click(".table-create")
     .click("[role='circlesButton']")
         .waitForExist("[role='circleCreateButton']", TIMEOUT)
 }
 
 fn.circleSettingsOpen = function(circleName) {
     return this
-    .circleListOpen()
-        .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]")
+//    .circleListOpen()
+        /*.then(
+            function(){selena.regActionResult("Открытие настроек круга " + circleName, 1)},
+            function(e){selena.regActionResult("Открытие настроек круга " + e.message, 0)}
+        )*/
+    .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
 /*            .then(function(isExisting) {
                     console.log(" " + isExisting, "Круг " + circleName + " существует");
             })*/
