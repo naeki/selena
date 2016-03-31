@@ -8,20 +8,24 @@ html
     script(src='js/jq.js')
     script(src='js/main.js')
   body
-    p Test runner v 0.0.1
+    h1 
+      b Selena 
+      span test runner 
+        b ver. 0.1
     div(
       class="url-select"
     )
       label(
         for="url"
-      ) Url
+      ) Url для тестирования: 
       select(
         name="url" 
         id="url"
       )
+        option(value="http://tm.hub-head.com/") tm.hub-head.com 
         option(value="http://artyom.task.dev-lds.ru/") artyom.task.dev-lds.ru
         option(value="http://tm.dev-lds.ru/") tm.dev-lds.ru
-        option(value="http://tm.hub-head.com/") tm.hub-head.com 
+        
 
     input(
       type="button" 
