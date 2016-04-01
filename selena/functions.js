@@ -165,8 +165,8 @@ fn.sphereDDOpen = function(sphereName) {
     return this
     .isExisting("//*[@role='sphereName' and contains(text(),'" + sphereName + "')]")
         .then(
-            function(){selena.regActionResult("Сфера " + sphereName + " в списке присутствует", 1)},
-            function(e){selena.regActionResult("Сфера " + sphereName + " в списке присутствует " + e.message, 0)}
+            function(){selena.regActionResult("Проверка на присутствие сферы " + sphereName + " в списке сфер", 1)},
+            function(e){selena.regActionResult("Проверка на присутствие сферы " + sphereName + " в списке сфер " + e.message, 0)}
         )
     .click("//*[@role='sphereName' and contains(text(),'" + sphereName + "')]/../../*[@role='sphereMenu']")
         .waitForVisible("[title*='Settings']", TIMEOUT)
@@ -216,8 +216,8 @@ fn.sphereCreate = function(sphereName) {
     .sphereListOpen()
         .waitForExist("//span[contains(text(),'" + sphereName + "')]")
             .then(
-                function(){selena.regActionResult("Сфера " + sphereName + " создана", 1)},
-                function(e){selena.regActionResult("Сфера " + sphereName + " создана " + " " + e.message, 0)}
+                function(){selena.regActionResult("Создание сферы " + sphereName, 1)},
+                function(e){selena.regActionResult("Создание сферы " + sphereName + " " + e.message, 0)}
             )
     .keys(["Escape"])
     .switchTabAndCallback(tabMap.first)
@@ -260,8 +260,8 @@ fn.sphereDeleteAny = function() {
         .keys(["Space"])
         .waitForExist("//*[@role='sphereName'][contains(text(),'" + sphereName + "')]", TIMEOUT, true)
             .then(
-                function(){selena.regActionResult("Сфера " + sphereName + " удалена", 1)},
-                function(e){selena.regActionResult("Сфера " + sphereName + " удалена " + " " + e.message, 0)}
+                function(){selena.regActionResult("Удаление сферы " + sphereName, 1)},
+                function(e){selena.regActionResult("Удаление сферы " + sphereName + " " + e.message, 0)}
             )
     })
     ;

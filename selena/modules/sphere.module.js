@@ -61,20 +61,30 @@ testModule = {
 testModule.tests.sphereColorChange = {
     call : function(sphereName) {
     return this
-    .isExisting(".sphere-settings-popup__icon", TIMEOUT)
+    .isExisting(".sphere-settings-popup__icon")
+        .then(
+            function(){selena.regActionResult("Проверка на кнопку смены цвета", 1)},
+            function(e){selena.regActionResult("Проверка на кнопку смены цвета " + e.message, 0)}
+        )
     .click(".sphere-settings-popup__icon")
         .waitForExist(".color-picker-grid", TIMEOUT)
-/*            .then(function(isExisting) {
-                console.log(" " + isExisting, "ДД смены цвета сферы " +  sphereName + " открыт")
-            })*/
+            .then(
+                function(){selena.regActionResult("Проверка на появление color picker", 1)},
+                function(e){selena.regActionResult("Проверка на появление color picker " + e.message, 0)}
+            )
     .click(".color-picker-grid-item[data-color='#00e9b6']")
+        .waitForExist(".sphere-settings-popup__icon[style*='rgb(0, 233, 182)']", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Проверка в первом табе в карточке сферы. Сфера " + sphereName + " покрашена", 1)},
+                function(e){selena.regActionResult("Проверка в первом табе в карточке сферы. Сфера " + sphereName + " покрашена " + e.message, 0)}
+            )
     .keys(["Escape"])
     .switchTabAndCallback(tabMap.second)
     .sphereListOpen()
         .waitForExist(".sphere-icon[style*='rgb(0, 233, 182)']", TIMEOUT)
             .then(
-                function(){selena.regActionResult("Сфера " + sphereName + " покрашена", 1)},
-                function(e){selena.regActionResult("Сфера " + sphereName + " покрашена " + " " + e.message, 0)}
+                function(){selena.regActionResult("Проверка во втором табе в сайдбаре. Сфера " + sphereName + " покрашена", 1)},
+                function(e){selena.regActionResult("Проверка во втором табе в сайдбаре. Сфера " + sphereName + " покрашена " + " " + e.message, 0)}
             )
     .keys(["Escape"])
     .keys(["Escape"])
