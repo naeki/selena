@@ -100,8 +100,8 @@ client
         function(){
             results["setup"] = 1;
             return this
-                .checkLogin()
-                .checkCircle()
+//                .checkLogin()
+//                .checkCircle()
                 .checkSphere()
             ;    
         },

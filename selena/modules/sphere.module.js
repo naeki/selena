@@ -86,20 +86,57 @@ testModule.tests.sphereColorChange = {
 
 testModule.tests.sphereRename = {
     call : function(sphereNameBefore, sphereNameAfter) {
+    var sphereNameClear;
     return this
-    .sphereListOpen()
     .click("//*[@role='sphereCard']//*[@role='sphereName']")
+        .waitForExist("//*[@contenteditable='true'][contains(text(),'" + sphereNameBefore + "')]", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Активация переименования сферы", 1)},
+                function(e){selena.regActionResult("Активация переименования сферы " + e.message, 0)}
+            )
     .clearElement("//*[@role='sphereCard']//*[@role='sphereName']")
+    .getText("//*[@role='sphereCard']//*[@role='sphereName']")        
+        .then(
+            function(text) {
+            console.log(text);  
+            sphereNameClear = text;
+        })
+        .then(
+            function(){selena.regActionResult("Поле с именем сферы чистое. В кавычках его содержимое '" + sphereNameClear +  "'", 1)},
+            function(e){selena.regActionResult("Поле с именем сферы чистое. В кавычках его содержимое '" + sphereNameClear +  "' " + e.message, 0)}
+        )
     .keys(sphereNameAfter)
+        .waitForExist("//*[@contenteditable='true'][contains(text(),'" + sphereNameAfter + "')]", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Ввод нового имени " + sphereNameAfter + " сферы", 1)},
+                function(e){selena.regActionResult("Ввод нового имени " + sphereNameAfter + " сферы " + e.message, 0)}
+            )
     .keys(["Delete"])
     .keys(["Enter"])
     .pause(100)
     .keys(["Enter"])
+        .waitForExist("//*[@contenteditable='false'][contains(text(),'" + sphereNameAfter + "')]", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Завершение редактирования названия сферы", 1)},
+                function(e){selena.regActionResult("Завершение редактирования названия сферы" + e.message, 0)}
+            )
         .waitForExist("//*[@role='sphereCard']//*[@role='sphereName'][contains(text(),'" + sphereNameAfter + "')]", TIMEOUT)
             .then(
-                function(){selena.regActionResult("Сфера " + sphereName + " переименована в " + sphereNameAfter, 1)},
-                function(e){selena.regActionResult("Сфера " + sphereName + " переименована в " + sphereNameAfter + " " + e.message, 0)}
+                function(){selena.regActionResult("Проверка в карточке. Сфера " + sphereNameBefore + " переименована в " + sphereNameAfter, 1)},
+                function(e){selena.regActionResult("Проверка в карточке. Сфера " + sphereNameBefore + " переименована в " + sphereNameAfter + " " + e.message, 0)}
             )
+    .keys(["Escape"])
+    .keys(["Escape"])
+    .switchTabAndCallback(tabMap.second)
+    .sphereListOpen()
+        .waitForExist("//*[@role='sphereName'][contains(text(),'" + sphereNameAfter + "')]", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Проверка в сайдбаре второго таба. Сфера " + sphereNameBefore + " переименована в " + sphereNameAfter, 1)},
+                function(e){selena.regActionResult("Проверка в сайдбаре второго таба. Сфера " + sphereNameBefore + " переименована в " + sphereNameAfter + " " + e.message, 0)}
+            )
+    .keys(["Escape"])
+    .keys(["Escape"])
+    .switchTabAndCallback(tabMap.first)
     ;
     },
     message : "Переименование сферы"
