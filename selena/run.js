@@ -12,16 +12,6 @@ var LOGIN1 = 'vadim+0001@levelup.ru',
     MEMBER2NAME = 'Vadim 0002'
     PASS = '123123',
     WRONGLOGINPASS = 'mail@mail.mail',
-    CIRCLE1 = 'CIRCLE1',
-    CIRCLE2 = 'CIRCLE2',
-    SPHERE1 = 'SPHERE1',
-    SPHERE2 = 'SPHERE2',
-    SPHERE3 = 'SPHERE3',
-//    SPHERE4 = 'SPHERE4',
-    sphere_names = [SPHERE1, SPHERE2/*, SPHERE3*/],
-    SPHEREGROUP1 = 'GROUP 1',
-    SPHEREGROUP2 = 'GROUP 2',
-    SPHEREGROUP3 = 'GROUP 3',
     TASK1 = 'TASK-FOR-UNFOLLOW',
     TASK2 = 'TASK-FOR-DELETE',
     TASK3 = 'TASK3',
@@ -85,6 +75,7 @@ client.addCommand("sendResults", function(){
 // Modules
 selena.addModule(client, require("./modules/login.module"));  // checkLogin
 selena.addModule(client, require("./modules/circle.module"));  // checkCircle
+selena.addModule(client, require("./modules/sphere.module"));  // checkSphere
 
 
 
@@ -110,7 +101,9 @@ client
             results["setup"] = 1;
             return this
                 .checkLogin()
-                .checkCircle();    
+                .checkCircle()
+                .checkSphere()
+            ;    
         },
         function(err){
             results["setup"] = 0;
