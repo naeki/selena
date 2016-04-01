@@ -30,8 +30,8 @@ function Module(name, obj){
 	this.data   = obj;
 	this.result = this.getResult();
 
-	this.el     = $("<div class='block'></div>");
-	this.header = $("<div result='"+ this.result +"' class='header'>"+ name +"</div>").appendTo(this.el);
+	this.el     = $("<div class='block module_block'></div>");
+	this.header = $("<div result='"+ this.result +"' class='header module_header'>"+ name +"</div>").appendTo(this.el);
 
 	if (this.data.result == "skip") return this;
 
@@ -82,8 +82,8 @@ function Test(obj){
 
 	this.result = this.getResult(this.data);
 
-	this.el     = $("<div class='block'></div>");
-	this.header = $("<div result='"+ this.result +"' class='header'>"+ this.data.message +"</div>").appendTo(this.el);
+	this.el     = $("<div class='block test_block'></div>");
+	this.header = $("<div result='"+ this.result +"' class='header test_header'>"+ this.data.message +"</div>").appendTo(this.el);
 
 	if (this.data.result == "skip") return this;
 	if (!this.result && !Test.error) Test.error = openBlock(this.el);
