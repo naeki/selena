@@ -74,8 +74,10 @@ client.addCommand("sendResults", function(){
 // Мы можем не просто добавлять подряд, а в сложном порядке. Сначала добавляем в массив, а уже потом ставим в некоторм порядке в колстек.
 // Modules
 selena.addModule(client, require("./modules/login.module"));  // checkLogin
+selena.addModule(client, require("./modules/basic.module"));  // checkBasic
 selena.addModule(client, require("./modules/circle.module"));  // checkCircle
 selena.addModule(client, require("./modules/sphere.module"));  // checkSphere
+selena.addModule(client, require("./modules/sphereContextMenu.module"));  // checkSphere
 
 
 
@@ -100,9 +102,11 @@ client
         function(){
             results["setup"] = 1;
             return this
-//                .checkLogin()
-//                .checkCircle()
+                .checkLogin()
+                .checkBasic()
+                .checkCircle()
                 .checkSphere()
+                .checkSphereContextMenu()
             ;    
         },
         function(err){

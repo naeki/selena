@@ -14,7 +14,7 @@ fn.sessionStart = function() {
             global.tabMap[tabId] = 'FIRST';
         })
     .url(env.url)
-    .windowHandleSize({width: 800, height: 1200})
+    .windowHandleSize({width: 900, height: 1200})
     .windowHandlePosition({x: 0, y: 0})
     .waitForExist("[name='login']", TIMEOUT)
         .then(
@@ -31,7 +31,7 @@ fn.secondWindow = function() {
             global.tabMap.second = tabId;
             global.tabMap[tabId] = 'SECOND';
         })
-    .windowHandlePosition({x: 800, y: 5})
+    .windowHandlePosition({x: 900, y: 5})
         .then(
             function(){selena.regActionResult("Открытие второго таба с адресом " + env.url, 1)},
             function(e){selena.regActionResult("Открытие второго таба с адресом " + env.url + e.message, 0)}
@@ -130,7 +130,6 @@ fn.circleCreateNew = function(circleName) {
 
 fn.circleDelete = function(circleName) {
     return this
-    .circleSettingsOpen(circleName)
     .click("[role='circleDelete']")
     .keys(["Space"])
     .circleListOpen()
@@ -146,8 +145,8 @@ fn.QCLOpen = function() {
     .moveToObject("[role='mainButton']")
         .waitForVisible("[role='createSphere']", TIMEOUT)
             .then(
-                function(){selena.regActionResult("Открытие формы 'быстрого создания'", 1)},
-                function(e){selena.regActionResult("Открытие формы 'быстрого создания' " + e.message, 0)}
+                function(){selena.regActionResult("Наведение на «+» и появление кнопок создания сферы/карточек", 1)},
+                function(e){selena.regActionResult("Наведение на «+» и появление кнопок создания сферы/карточек " + e.message, 0)}
             );
 }
 
@@ -227,12 +226,28 @@ fn.sphereCreate = function(sphereName) {
 fn.sphereDelete = function(sphereName) {
     return this
     .sphereSettingsOpen(sphereName)
+    .sphereListOpen()
+    .waitForExist("[role='sphereDelete']", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Доступность кнопки удаления сферы", 1)},
+                function(e){selena.regActionResult("Доступность кнопки удаления сферы " + e.message, 0)}
+            )
     .click("[role='sphereDelete']")
+        .waitForExist("//*[contains(@class,'dialog-buttons')]", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Появление диалога удаления сферы " + sphereName, 1)},
+                function(e){selena.regActionResult("Появление диалога удаления сферы " + sphereName + " " + e.message, 0)}
+            )
     .keys(["Space"])
+    .waitForExist("//*[contains(@class,'dialog-buttons')]", TIMEOUT, true)
+            .then(
+                function(){selena.regActionResult("Закрытие диалога удаления сферы " + sphereName, 1)},
+                function(e){selena.regActionResult("Закрытие диалога удаления сферы " + sphereName + " " + e.message, 0)}
+            )
     .waitForExist("//*[@role='sphereName'][contains(text(),'" + sphereName + "')]", TIMEOUT, true)
         .then(
-            function(){selena.regActionResult("Сфера " + sphereName + " удалена", 1)},
-            function(e){selena.regActionResult("Сфера " + sphereName + " удалена " + " " + e.message, 0)}
+            function(){selena.regActionResult("Удаление сферы " + sphereName, 1)},
+            function(e){selena.regActionResult("Удаление сферы " + sphereName + " " + e.message, 0)}
         )
     ;
 }
@@ -244,29 +259,22 @@ fn.sphereDeleteAny = function() {
     .getText("//*[@role='spheresRecent']//*[@role='sphereName']")        
         .then(
             function(text) {
-            console.log(text);  
-            console.log(text[0]);  
             sphereName = text[0];
+            return this
+                .sphereDelete(sphereName)
         })
-    .then(function(){
-        return this
-        .sphereSettingsOpen(sphereName)
-        .click("[role='sphereDelete']")
-            .waitForExist("//*[contains(@class,'dialog-buttons')]")
-                .then(
-                    function(){selena.regActionResult("Появление диалога удаления сферы " + sphereName, 1)},
-                    function(e){selena.regActionResult("Появление диалога удаления сферы " + " " + e.message, 0)}
-                )
-        .keys(["Space"])
-        .waitForExist("//*[@role='sphereName'][contains(text(),'" + sphereName + "')]", TIMEOUT, true)
-            .then(
-                function(){selena.regActionResult("Удаление сферы " + sphereName, 1)},
-                function(e){selena.regActionResult("Удаление сферы " + sphereName + " " + e.message, 0)}
-            )
-    })
     ;
 }
 
+//        var def = deferred();
+//            def.resolve();
+//            def = def.promise;
+//            for (var i = 0; sphere_names[i]; i++) {
+//                def = def.then(function(name){
+//                    return sphereCreate(name);
+//                }.bind(null, sphere_names[i]));
+//            }
+//            return def;
 
 // client.addCommand("sessionEndAll", function() {
 //     console.log(" ");

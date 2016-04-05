@@ -38,36 +38,16 @@ testModule = {
     testSetup : function(){
         return this
             .circleListOpen()
-            .circleCreateNew(circleName)
+            .circleCreateNew(circleNameBefore)
     },
     testClean : function(){
         return this
+            .circleSettingsOpen(circleNameAfter)
             .circleDelete(circleNameAfter)
     },
 
     tests : {}
 }
-
-
-/*testModule.tests.circleCreateNew = {
-    call : function(circleName) {
-        return this
-            .click("[role='circleCreateButton']")
-                .waitForVisible("[role='newCircleName']", TIMEOUT)
-                    .then(
-                        function(){selena.regActionResult("Открытие формы создания нового круга", 1)},
-                        function(e){selena.regActionResult("Открытие формы создания нового круга " + e.message, 0)}
-                    )
-            .setValue("[role='newCircleName']", circleName)    
-            .click("[role='newCircleSave']")
-                .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
-                    .then(
-                        function(){selena.regActionResult("Создание круга " + circleName, 1)},
-                        function(e){selena.regActionResult("Создание круга " + circleName + e.message, 0)}
-                    );
-    },
-    message : "Создание круга"
-}*/
 
 testModule.tests.circleRename = {
     call : function(circleNameBefore, circleNameAfter) {
@@ -87,23 +67,6 @@ testModule.tests.circleRename = {
     },
     message : "Переименование круга"
 }
-
-/*testModule.tests.circleDelete = {
-    call : function(circleName) {
-        return this
-            .circleSettingsOpen(circleName)
-            .click("[role='circleDelete']")
-            .keys(["Space"])
-            .circleListOpen()
-                .isExisting("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
-                    .then(
-                        function(){selena.regActionResult("Круг " + circleName + " удален", 1)},
-                        function(e){selena.regActionResult("Удаление круга " + e.message, 0)}
-                    );
-    },
-    message : "Удаление круга"
-}*/
-
 
 
 module.exports = testModule;
