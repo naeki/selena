@@ -265,14 +265,38 @@ fn.sphereDeleteAny = function() {
         })
     ;
 }
+ 
+fn.sphereDeleteAll = function() {
+    var sphereName;
+    return this
+    .sphereListOpen()
+    .getText("//*[@role='spheresRecent']//*[@role='sphereName']")        
+        .then(
+            function(text) {
+                var dfd = this;
+                
+                if (typeof text === "string") text = [text];
+                
+                for (var i = 0; text[i]; i++) {
+                    dfd = dfd.then(function(name){
+                        return this.sphereDelete(name);
+                    }.bind(dfd, text[i]));
+                    console.log("~~~~~ Sphere delete ", i, text[i])
+                }    
+
+                return dfd;
+            }
+        )
+    ;
+}
 
 //        var def = deferred();
 //            def.resolve();
 //            def = def.promise;
-//            for (var i = 0; sphere_names[i]; i++) {
+//            for (var i = 0; text[i]; i++) {
 //                def = def.then(function(name){
-//                    return sphereCreate(name);
-//                }.bind(null, sphere_names[i]));
+//                    return sphereDelete(name);
+//                }.bind(null, text[i]));
 //            }
 //            return def;
 

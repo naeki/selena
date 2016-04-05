@@ -22,9 +22,8 @@ testModule = {
     call : function(){
     return this
         .sphereUnfollowFollow(sphereName)
-//        .sphereFollow(sphereName)
         .sphereStarredAddRemove(sphereName)
-//        .sphereStarredRemove(sphereName)
+        .sphereQCLAddRemove(sphereName)
         ;  
     },
     setup : function(){
@@ -56,7 +55,7 @@ testModule = {
     },
     testClean : function(){
         return this
-            .sphereDeleteAny()
+            .sphereDeleteAll()
     },
 
     tests : {}
@@ -89,6 +88,7 @@ testModule.tests.sphereUnfollowFollow = {
     .keys(["Escape"])
     .keys(["Escape"])
     .switchTabAndCallback(tabMap.first)
+    
     .sphereListOpen()
     .sphereDDOpen(sphereName)
     .waitForVisible("[title='Unfollow']", TIMEOUT)
@@ -145,6 +145,7 @@ testModule.tests.sphereStarredAddRemove = {
     .keys(["Escape"])
     .keys(["Escape"])
     .switchTabAndCallback(tabMap.first)
+    
     .sphereListOpen()
     .sphereDDOpen(sphereName)
     .waitForVisible("[title*='Remove star']", TIMEOUT)
@@ -170,6 +171,65 @@ testModule.tests.sphereStarredAddRemove = {
     .keys(["Escape"])
     .switchTabAndCallback(tabMap.first)
     ;
+    },
+    message : "Add/Remove starred сферы"
+}
+
+testModule.tests.sphereQCLAddRemove = {
+    call : function(sphereName) {
+    return this
+    .sphereDDOpen(sphereName)
+    .waitForVisible("[title*='Add to starred']", TIMEOUT)
+        .then(
+            function(){selena.regActionResult("Пункт Show in quick create list присутствует в контекстном меню", 1)},
+            function(e){selena.regActionResult("Пункт Show in quick create list присутствует в контекстном меню " + e.message, 0)}
+        )
+    .click("[title*='Show in quick create list']")
+        .waitForExist("//*[@title='Remove from quick create list']", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Добавление " + sphereName + " в QCL (смена состояния пункта в DD сферы)", 1)},
+                function(e){selena.regActionResult("Добавление " + sphereName + " в QCL (смена состояния пункта в DD сферы) " + e.message, 0)}
+            )
+    .keys(["Escape"])
+    .keys(["Escape"])
+    
+    .switchTabAndCallback(tabMap.second)
+    .moveToObject("[role='mainButton']")
+        .waitForExist("//*[@class='quick-sphere' and contains(text(),'S')]", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Сфера " + sphereName + " появилась в QCL", 1)},
+                function(e){selena.regActionResult("Сфера " + sphereName + " появилась в QCL " + e.message, 0)}
+            )
+    .keys(["Escape"])
+    .keys(["Escape"])
+    .switchTabAndCallback(tabMap.first)
+    
+    .sphereListOpen()
+    .sphereDDOpen(sphereName)
+        .waitForVisible("[title*='Remove from quick create list']", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Пункт Remove from quick create list присутствует в контекстном меню", 1)},
+                function(e){selena.regActionResult("Пункт Remove from quick create list присутствует в контекстном меню " + e.message, 0)}
+            )
+    .click("[title*='Remove from quick create list']")
+        .waitForExist("[title*='Show in quick create list']", TIMEOUT)
+            .then(
+                function(){selena.regActionResult("Удаление " + sphereName + " из QCL (смена состояния пункта в DD сферы)", 1)},
+                function(e){selena.regActionResult("Удаление " + sphereName + " из QCL (смена состояния пункта в DD сферы) " + e.message, 0)}
+            )
+    .keys(["Escape"])
+    .keys(["Escape"])
+
+    .switchTabAndCallback(tabMap.second)
+    .moveToObject("[role='mainButton']")
+        .isExisting("//*[@class='quick-sphere' and contains(text(),'S')]")
+            .then(
+                function(){selena.regActionResult("Сфера " + sphereName + " пропала из QCL", 1)},
+                function(e){selena.regActionResult("Сфера " + sphereName + " пропала из QCL " + e.message, 0)}
+            )
+    .keys(["Escape"])
+    .keys(["Escape"])
+;
     },
     message : "Add/Remove starred сферы"
 }
