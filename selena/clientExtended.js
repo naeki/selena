@@ -178,7 +178,7 @@ selena.regActionResult = function(message, result, skip){
 
     selena.work.result = result in selena.work ? selena.work.result && result : result;
 
-    if ((skip === false && result) || (skip === true && !result)) 
+    if ((skip === false && result) || (skip == true && !result)) 
         selena.skip = skip;
 }
 

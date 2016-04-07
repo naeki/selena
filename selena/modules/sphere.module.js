@@ -28,13 +28,8 @@ testModule = {
     setup : function(){
         return this
 //            .loginTwoWindow()
-            .login(LOGIN1, PASS)
-                .waitForVisible("[role='mainButton']", TIMEOUT)
-                .pause(500)
-                    .then(
-                        function(){selena.regActionResult("Авторизация и открытие системы", 1)},
-                        function(e){selena.regActionResult("Авторизация и открытие системы " + e.message, 0)}
-                    )
+            .switchTabAndCallback(tabMap.first)
+            .loginCorrect(LOGIN1, PASS)
             .secondWindow()
             
             ;

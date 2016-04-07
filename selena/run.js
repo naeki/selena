@@ -77,7 +77,9 @@ selena.addModule(client, require("./modules/login.module"));  // checkLogin
 selena.addModule(client, require("./modules/basic.module"));  // checkBasic
 selena.addModule(client, require("./modules/circle.module"));  // checkCircle
 selena.addModule(client, require("./modules/sphere.module"));  // checkSphere
-selena.addModule(client, require("./modules/sphereContextMenu.module"));  // checkSphere
+selena.addModule(client, require("./modules/sphereContextMenu.module"));  // checkSphereContextMenu
+//selena.addModule(client, require("./modules/taskEdit.module"));  // checkTask
+selena.addModule(client, require("./modules/taskContextMenu.module"));  // checkTaskContextMenu
 
 
 
@@ -107,6 +109,7 @@ client
                 .checkCircle()
                 .checkSphere()
                 .checkSphereContextMenu()
+                .checkTaskContextMenu()
             ;    
         },
         function(err){

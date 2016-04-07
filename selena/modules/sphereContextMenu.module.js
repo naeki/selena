@@ -29,13 +29,7 @@ testModule = {
     setup : function(){
         return this
 //            .loginTwoWindow()
-            .login(LOGIN1, PASS)
-                .waitForVisible("[role='mainButton']", TIMEOUT)
-                .pause(500)
-                    .then(
-                        function(){selena.regActionResult("Авторизация и открытие системы", 1)},
-                        function(e){selena.regActionResult("Авторизация и открытие системы " + e.message, 0)}
-                    )
+            .loginCorrect(LOGIN1, PASS)
             .secondWindow()
             
             ;
@@ -170,6 +164,7 @@ testModule.tests.sphereStarredAddRemove = {
     .keys(["Escape"])
     .keys(["Escape"])
     .switchTabAndCallback(tabMap.first)
+    
     ;
     },
     message : "Add/Remove starred сферы"
@@ -229,9 +224,10 @@ testModule.tests.sphereQCLAddRemove = {
             )
     .keys(["Escape"])
     .keys(["Escape"])
+    .switchTabAndCallback(tabMap.first)
 ;
     },
-    message : "Add/Remove starred сферы"
+    message : "Add/Remove сферы в QCL"
 }
 
 

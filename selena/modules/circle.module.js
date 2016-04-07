@@ -21,13 +21,7 @@ testModule = {
     },
     setup : function(){
         return this
-            .login(LOGIN1, PASS)
-                .waitForVisible("[role='mainButton']", TIMEOUT)
-                .pause(500)
-                    .then(
-                        function(){selena.regActionResult("Авторизация и открытие системы", 1)},
-                        function(e){selena.regActionResult("Авторизация и открытие системы " + e.message, 0)}
-                    )
+            .loginCorrect(LOGIN1, PASS)
             ;
     },
     clean : function(){
