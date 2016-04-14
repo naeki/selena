@@ -1,14 +1,5 @@
 var selena = require("../clientExtended");
 
-var LOGIN1 = 'vadim+0001@levelup.ru',
-    PASS = '123123',
-    TIMEOUT = 4000,
-    sphereName = 'S'+Date.now(),
-    circleName = 'C'+Date.now(),
-    taskName = 'T'+Date.now()
-;
-
-
 // Test module
 testModule = {
     name : "checkBasic",
@@ -30,7 +21,6 @@ testModule = {
     },
     setup : function(){
         return this
-            .switchTabAndCallback(tabMap.first)
             .loginCorrect(LOGIN1, PASS)
             .secondWindow()
             ;
@@ -78,21 +68,21 @@ testModule.tests.sphereCreateTest = {
             .waitForExist('.new-sphere-name', TIMEOUT)
                 .then(
                     function(){selena.regActionResult("Появление формы создания сферы", 1)},
-                    function(e){selena.regActionResult("Появление формы создания сферы " + e.message)}
+                    function(e){selena.regActionResult("Появление формы создания сферы " + e.message, 0, true)}
                 )
         .setValue(".new-sphere-name", sphereName)
         .keys(["Enter"])
             .waitForExist("//div[contains(text(),'" + sphereName + "')]", TIMEOUT)
                 .then(
                     function(){selena.regActionResult("Форма создания сферы закрылась", 1)},
-                    function(e){selena.regActionResult("Форма создания сферы закрылась " + e.message)}
+                    function(e){selena.regActionResult("Форма создания сферы закрылась " + e.message, 0, true)}
                 )
         .switchTabAndCallback(tabMap.second)
         .sphereListOpen()
             .waitForExist("//span[contains(text(),'" + sphereName + "')]")
                 .then(
                     function(){selena.regActionResult("Создание сферы " + sphereName, 1)},
-                    function(e){selena.regActionResult("Создание сферы " + sphereName + " " + e.message)}
+                    function(e){selena.regActionResult("Создание сферы " + sphereName + " " + e.message, 0, true)}
                 )
         .keys(["Escape"])
         .switchTabAndCallback(tabMap.first)
@@ -111,19 +101,19 @@ testModule.tests.sphereDeleteTest = {
             .waitForExist("[role='sphereDelete']", TIMEOUT)
                 .then(
                     function(){selena.regActionResult("Кнопка удаления сферы доступна", 1)},
-                    function(e){selena.regActionResult("Кнопки удаления сферы не доступна " + e.message)}
+                    function(e){selena.regActionResult("Кнопки удаления сферы не доступна " + e.message, 0, true)}
                 )
         .click("[role='sphereDelete']")
             .waitForExist("//*[contains(@class,'dialog-buttons')]", TIMEOUT)
                 .then(
                     function(){selena.regActionResult("Клик на кнопку удаления сферы: Диалог удаления сферы " + sphereName + " появился", 1)},
-                    function(e){selena.regActionResult("Клик на кнопку удаления сферы: Диалог удаления сферы " + sphereName + " не появился " + e.message)}
+                    function(e){selena.regActionResult("Клик на кнопку удаления сферы: Диалог удаления сферы " + sphereName + " не появился " + e.message, 0, true)}
                 )
         .keys(["Space"])
             .waitForExist("//*[contains(@class,'dialog-buttons')]", TIMEOUT, true)
                     .then(
                         function(){selena.regActionResult("Нажатие пробела: Диалог удаления сферы " + sphereName + " закрылся", 1)},
-                        function(e){selena.regActionResult("Нажатие пробела: Диалог удаления сферы " + sphereName + " не закрылся " + e.message)}
+                        function(e){selena.regActionResult("Нажатие пробела: Диалог удаления сферы " + sphereName + " не закрылся " + e.message, 0, true)}
                     )
         .keys(["Escape"])
         .switchTabAndCallback(tabMap.second)
@@ -131,7 +121,7 @@ testModule.tests.sphereDeleteTest = {
             .waitForExist("//*[@role='sphereName'][contains(text(),'" + sphereName + "')]", TIMEOUT, true)
                 .then(
                     function(){selena.regActionResult("Сфера " + sphereName + " удалена (пропала в списке сфер)", 1)},
-                    function(e){selena.regActionResult("Сфера " + sphereName + " не удалена (не пропала в списке сфер)" + e.message)}
+                    function(e){selena.regActionResult("Сфера " + sphereName + " не удалена (не пропала в списке сфер)" + e.message, 0, true)}
                 )
         .keys(["Escape"])
         .switchTabAndCallback(tabMap.first)
@@ -167,13 +157,13 @@ testModule.tests.taskDDOpenTest = {
             .waitForVisible("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]/../../../*[@role='menuButton']", TIMEOUT)
                 .then(
                     function(){selena.regActionResult("Наведение на карточку " + taskName, 1)},
-                    function(e){selena.regActionResult("Не появилась кнопка параметров (меню) карточки " + taskName + " " + e.message)}
+                    function(e){selena.regActionResult("Не появилась кнопка параметров (меню) карточки " + taskName + " " + e.message, 0, true)}
                 )
         .click("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]/../../../*[@role='menuButton']")
             .waitForVisible("[role='menuDropdown']", TIMEOUT)
                 .then(
                     function(){selena.regActionResult("Клик на ••• и открытие контекстного меню " + taskName, 1)},
-                    function(e){selena.regActionResult("При клике на ••• не появлилось контекстное меню карточки " + taskName + " " + e.message)}
+                    function(e){selena.regActionResult("При клике на ••• не появлилось контекстное меню карточки " + taskName + " " + e.message, 0, true)}
                 )
         .taskDelete(taskName)
         

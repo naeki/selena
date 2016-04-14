@@ -1,7 +1,6 @@
 var results = require("./results");
 var selena = {};
 
-
 selena.addModule = function(client, module){
     // Command for module excution
 
@@ -35,6 +34,7 @@ selena.addModule = function(client, module){
 
         // Commands for test setup/clean
         selena.addFunction(client, "testSetup", function(testName){
+            console.log("\n", "SETUP", testName, "\n");
             selena.work = moduleResult["tests"][testName]["setup"] = {};
 
             return module.testSetup.apply(this, arguments);
@@ -42,6 +42,8 @@ selena.addModule = function(client, module){
 
 
         selena.addFunction(client, "testClean", function(testName){
+            console.log("\n", "CLEAN", testName, "\n");
+          
             selena.work = moduleResult["tests"][testName]["clean"] = {};
 
             return module.testClean.apply(this, arguments)
@@ -102,11 +104,13 @@ selena.addTest = function(module, client, name, test){
         }
 
         client.addCommand("testCall", function(){
+            console.log("\n", "TESTCALL", name, "\n")
+            
             // Указываем, что сейчас выполняется
             if (selena.skip) {
                 return client;
             }
-            console.log("test call input")
+//            console.log("test call input")
             selena.work = testResult;
 
             // Вызываем выполнение теста
@@ -150,19 +154,29 @@ selena.addTest = function(module, client, name, test){
 
 
 selena.addFunction = function(client, name, callback, rewrite){
-    client.addCommand(name, function(){
-        return (callback.apply(this, arguments) || client)
-            .then(
-                function(){},
-                function(e){
-                    selena.regActionResult(e.message, 0, true);
-                }
+  client.addCommand(name, function(){
+    return (callback.apply(this, arguments) || client)
+      .then(
+        function(){},
+        function(e){
+          selena.regActionResult(e.message, 0);/*
+          global.TIMEOUT = 300000;
+          return this.debug().then(function(){
+            global.TIMEOUT = 4000;
+            console.log("\n", "debug", "\n");
+          })*/
+        }
             );
     }, rewrite);
 }
 
 
+/*
 
+String message
+
+
+*/
 selena.regActionResult = function(message, result, skip){
     if (!selena.work) return;
 

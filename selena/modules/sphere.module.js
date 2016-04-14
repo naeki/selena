@@ -1,21 +1,5 @@
 var selena = require("../clientExtended");
 
-var LOGIN1 = 'vadim+0001@levelup.ru',
-    PASS = '123123',
-    SPHERE1 = 'SPHERE1',
-    SPHERE2 = 'SPHERE2',
-//    SPHERE3 = 'SPHERE3',
-//    sphere_names = [SPHERE1, SPHERE2/*, SPHERE3*/],
-    SPHEREGROUP1 = 'GROUP 1',
-    SPHEREGROUP2 = 'GROUP 2',
-    SPHEREGROUP3 = 'GROUP 3',
-    TIMEOUT = 4000,
-    sphereName = 'S'+Date.now(),
-    sphereNameBefore = sphereName,
-    sphereNameAfter = sphereName+1
-;
-
-
 // Test module
 testModule = {
     name : "checkSphere",
