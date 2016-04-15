@@ -2,7 +2,7 @@ var selena = require("../clientExtended");
 
 // Test module
 testModule = {
-    name : "checkSphere",
+    name : "Sphere",
     call : function(){
       return this
         .sphereRename(sphereNameBefore, sphereNameAfter)

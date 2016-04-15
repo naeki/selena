@@ -2,7 +2,7 @@ var selena = require("../clientExtended");
 
 // Test module
 testModule = {
-    name : "checkTaskContextMenu",
+    name : "Task in tree",
     call : function(){
     return this
         .taskFocusUnFocus(taskName)

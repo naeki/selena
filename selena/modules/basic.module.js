@@ -2,7 +2,7 @@ var selena = require("../clientExtended");
 
 // Test module
 testModule = {
-    name : "checkBasic",
+    name : "Basic",
     call : function(){
         console.log("module call");
         return this

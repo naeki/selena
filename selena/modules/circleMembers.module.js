@@ -4,7 +4,7 @@ var selena = require("../clientExtended");
 // сделаны в одном окне, так как во второе окно не приходит email приглашенного. Проверять по другим критериям пока нет желания.
 
 testModule = {
-  name : "checkCircleMembers",
+  name : "CircleMembers",
   call : function(){
     return this
       .circleMemberInviteNew(circleName, MEMBERRANDOM)

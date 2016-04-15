@@ -2,7 +2,7 @@ var selena = require("../clientExtended");
 
 // Test module
 testModule = {
-    name : "checkLogin",
+    name : "Login",
     call : function(){
         return this
         .loginEmptyFields()

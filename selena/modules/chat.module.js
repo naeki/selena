@@ -2,7 +2,7 @@ var selena = require("../clientExtended");
 
 // Test module
 testModule = {
-    name : "checkChat",
+    name : "Chat",
     call : function(){
     return this
         .chatMessageWriteDraft(taskName, chatMessage)

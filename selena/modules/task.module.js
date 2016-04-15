@@ -2,7 +2,7 @@ var selena = require("../clientExtended");
 
 // Test module
 testModule = {
-    name : "checkTask",
+    name : "Task",
     call : function(){
     return this
         .taskRename(taskNameBefore, taskNameAfter)
