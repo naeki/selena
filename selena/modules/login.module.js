@@ -4,11 +4,11 @@ var selena = require("../clientExtended");
 testModule = {
     name : "checkLogin",
     call : function(){
-      return this
+        return this
         .loginEmptyFields()
         .loginIncorrect()
         // .loginCorrect(LOGIN1, PASS)
-        ;  
+    ;  
     },
     setup : function(){},
     clean : function(){},

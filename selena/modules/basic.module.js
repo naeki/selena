@@ -4,18 +4,18 @@ var selena = require("../clientExtended");
 testModule = {
     name : "checkBasic",
     call : function(){
-      console.log("module call");
-      return this
-        .circleCreateTest(circleName)
-        .circleDeleteTest(circleName)
-      
-        .sphereCreateTest(sphereName)
-        .sphereDeleteTest(sphereName)
-      
-        .taskCreateTest(taskName)
-        .taskDeleteTest(taskName)
-        
-        .taskDDOpenTest(taskName)
+        console.log("module call");
+        return this
+            .circleCreateTest(circleName)
+            .circleDeleteTest(circleName)
+
+            .sphereCreateTest(sphereName)
+            .sphereDeleteTest(sphereName)
+
+            .taskCreateTest(taskName)
+            .taskDeleteTest(taskName)
+
+            .taskDDOpenTest(taskName)
         
         ;  
     },
@@ -40,7 +40,6 @@ testModule = {
 
 testModule.tests.circleCreateTest = {
     call : function(circleName) {
-        console.log("test call");
         return this
         .circleListOpen()
         .circleCreateNew(circleName)
@@ -57,7 +56,7 @@ testModule.tests.circleDeleteTest = {
         .circleDelete(circleName)
         ;
     },
-    message : "Удаление круга"
+    message : "Удаление круга (созданного предыдущим тестом)"
 }
 
 testModule.tests.sphereCreateTest = {
@@ -128,7 +127,7 @@ testModule.tests.sphereDeleteTest = {
         
         ;
     },
-    message : "Удаление сферы"
+    message : "Удаление сферы (созданной предыдущим тестом)"
 }
 
 testModule.tests.taskCreateTest = {
@@ -146,7 +145,7 @@ testModule.tests.taskDeleteTest = {
         .taskDelete(taskName)
         ;
     },
-    message : "Удаление карточки"
+    message : "Удаление карточки (созданной предыдущим тестом)"
 }
 
 testModule.tests.taskDDOpenTest = {
@@ -156,8 +155,8 @@ testModule.tests.taskDDOpenTest = {
         .moveToObject("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]")
             .waitForVisible("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]/../../../*[@role='menuButton']", TIMEOUT)
                 .then(
-                    function(){selena.regActionResult("Наведение на карточку " + taskName, 1)},
-                    function(e){selena.regActionResult("Не появилась кнопка параметров (меню) карточки " + taskName + " " + e.message, 0, true)}
+                    function(){selena.regActionResult("Наведение на карточку " + taskName + " и появление кнопки •••.", 1)},
+                    function(e){selena.regActionResult("Не появилась кнопка (•••) параметров (меню) карточки " + taskName + " " + e.message, 0, true)}
                 )
         .click("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]/../../../*[@role='menuButton']")
             .waitForVisible("[role='menuDropdown']", TIMEOUT)
@@ -165,6 +164,7 @@ testModule.tests.taskDDOpenTest = {
                     function(){selena.regActionResult("Клик на ••• и открытие контекстного меню " + taskName, 1)},
                     function(e){selena.regActionResult("При клике на ••• не появлилось контекстное меню карточки " + taskName + " " + e.message, 0, true)}
                 )
+        .keys(["Escape"])
         .taskDelete(taskName)
         
         ;

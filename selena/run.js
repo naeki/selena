@@ -32,7 +32,8 @@ var webdriverio = require('webdriverio');
     global.MESSAGE1 = '123';
     global.MESSAGE2 = '321';
 
-    global.tagNameNew = 't' + Date.now();
+    global.tagName = 't' + Date.now();
+    global.tagNameNew = tagName;
     global.tagNameOld = 'TAG1';
 
 //    TASK1 = 'TASK-FOR-UNFOLLOW',

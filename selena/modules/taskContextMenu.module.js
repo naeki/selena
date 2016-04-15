@@ -12,8 +12,8 @@ testModule = {
         .taskDeadlineAddToday(taskName)
         .taskDeadlineRemove(taskName)
         .taskMemberAddRemove(taskName, MEMBER1NAME)
-        .taskTagCreate(taskName, tagNameNew)
-        .taskTagAddRemove(taskName, tagNameOld)
+        .taskTagCreate(taskName, tagName)
+        .taskTagAddRemove(taskName, tagName)
         ;  
     },
     setup : function(){
@@ -288,22 +288,17 @@ testModule.tests.taskTagCreate = {
   call : function(taskName, tagName) {
   return this
 
-    .waitForVisible("[role='tagInput']", TIMEOUT)
+    .waitForExist("[role='tagInput']", TIMEOUT)
         .then(
           null
 //          function(){selena.regActionResult("Инпут для создания нового тега присутствует в контекстном меню", 1)}
             ,
           function(e){selena.regActionResult("Инпут для создания нового тега отсутствует в контекстном меню " + e.message, 0, true)}
         )
+    .selectorExecute("[role='tagInput']", function(els) {
+        els[0].scrollIntoView();
+    })
     .click("[role='tagInput']")
-//        .waitForSelected("[role='tagInput']", 1000)
-//            .then(
-//              function(){selena.regActionResult("Фокус в инпуте. Вводим название тега " + tagName, 1)},
-//              function(e){selena.regActionResult("Фокус не встал в инпут для ввода названия тега. " + e.message, 0, true)
-//                return this
-//                .click("[role='tagInput']")
-//                }
-//            )
     .keys(tagName)
     .keys(["Enter"])
       .waitForVisible("//*[@role='tag' and @title='" + tagName + "']", TIMEOUT)
@@ -329,27 +324,41 @@ testModule.tests.taskTagCreate = {
 }
 
 testModule.tests.taskTagAddRemove = {
-  call : function(taskName, tagName) {
-  return this
-
-      .waitForVisible("//*[@role='menuDropdown']//*[@role='tag' and @title='" + tagName + "']", TIMEOUT)
-        .then(
-          function(){selena.regActionResult("Тэг " + tagName + " присутствует в контекстном меню карточки " + taskName, 1)},
-          function(e){selena.regActionResult("Тэг " + tagName + " отсутствует в контекстном меню карточки " + taskName + " " + e.message, 0, true)}
-        )
+    call : function(taskName, tagName) {
+    return this
+    
+    .selectorExecute("[role='tagInput']", function(els) {
+        els[0].scrollIntoView();
+    })
+        .waitForVisible("//*[@role='menuDropdown']//*[@role='tag' and @title='" + tagName + "']", TIMEOUT)
+            .then(
+                null
+    //          function(){selena.regActionResult("Тэг " + tagName + " присутствует в контекстном меню карточки " + taskName, 1)}
+                ,
+              function(e){selena.regActionResult("Тэг " + tagName + " отсутствует в контекстном меню карточки " + taskName + " " + e.message, 0, true)}
+            )
     .click("//*[@role='menuDropdown']//*[@role='tag' and @title='" + tagName + "']")
     .switchTabAndCallback(tabMap.second)
         .waitForExist("//*[@role='task']//*[@role='tag']", TIMEOUT)
             .then(
-          function(){selena.regActionResult("Тэг " + tagName + " добавлен к таску " + taskName, 1)},
-          function(e){selena.regActionResult("Тэг " + tagName + " не добавлен к таску " + taskName + " " + e.message, 0, true)}
-        )
+                function(){selena.regActionResult("Тэг " + tagName + " добавлен к таску " + taskName, 1)},
+                function(e){selena.regActionResult("Тэг " + tagName + " не добавлен к таску " + taskName + " " + e.message, 0, true)}
+            )
+    
+    .click("//*[@role='task']//*[@role='tag']")
+        .waitForVisible("//*[@role='task']//*[@role='tag']", TIMEOUT, true)
+            .then(
+                function(){selena.regActionResult("Тэг удален " + tagName + " с карточки " + taskName, 1)},
+                function(e){selena.regActionResult("Тэг не удален " + tagName + " с карточки " + taskName + " " + e.message, 0, true)}
+            )
+    .keys(["Escape"])
+    
     .switchTabAndCallback(tabMap.first)
     .keys(["Escape"])
     
     ;
   },
-  message : "Добавление и удаление тега"
+  message : "Добавление тега, созданного в предыдущем тесте, и его удаление"
 }
 
 
