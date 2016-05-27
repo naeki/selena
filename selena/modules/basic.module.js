@@ -2,9 +2,8 @@ var selena = require("../clientExtended");
 
 // Test module
 testModule = {
-    name : "Basic",
+    name : "checkBasic",
     call : function(){
-        console.log("module call");
         return this
             .circleCreateTest(circleName)
             .circleDeleteTest(circleName)
@@ -46,13 +45,14 @@ testModule.tests.circleCreateTest = {
         ;
     },
     message : "Создание круга"
+
 }
 
 
 testModule.tests.circleDeleteTest = {
     call : function(circleName) {
         return this
-        .circleSettingsOpen(circleName)
+        .circleListOpen()
         .circleDelete(circleName)
         ;
     },
@@ -66,8 +66,8 @@ testModule.tests.sphereCreateTest = {
         .click("[role='createSphere']")
             .waitForExist('.new-sphere-name', TIMEOUT)
                 .then(
-                    function(){selena.regActionResult("Появление формы создания сферы", 1)},
-                    function(e){selena.regActionResult("Появление формы создания сферы " + e.message, 0, true)}
+                    function(){selena.regActionResult("Форма создания сферы открылась. Вводим " + sphereName + " и нажимаем Enter.", 1)},
+                    function(e){selena.regActionResult("Форма создания сферы не открылась. " + e.message, 0, true)}
                 )
         .setValue(".new-sphere-name", sphereName)
         .keys(["Enter"])
@@ -77,11 +77,11 @@ testModule.tests.sphereCreateTest = {
                     function(e){selena.regActionResult("Форма создания сферы закрылась " + e.message, 0, true)}
                 )
         .switchTabAndCallback(tabMap.second)
-        .sphereListOpen()
+        .sphereListOpen("Открываем список сфер для проверки, что созданная сфера появилась в нем.")
             .waitForExist("//span[contains(text(),'" + sphereName + "')]")
                 .then(
-                    function(){selena.regActionResult("Создание сферы " + sphereName, 1)},
-                    function(e){selena.regActionResult("Создание сферы " + sphereName + " " + e.message, 0, true)}
+                    function(){selena.regActionResult("Сфера " + sphereName + " создалась.", 1)},
+                    function(e){selena.regActionResult("Сфера " + sphereName + " не создалась. " + e.message, 0, true)}
                 )
         .keys(["Escape"])
         .switchTabAndCallback(tabMap.first)
@@ -99,28 +99,28 @@ testModule.tests.sphereDeleteTest = {
         .sphereListOpen("Повторное открытие сайдбара для проверки исчезновения сферы при удалении, так как при открытии настроек сферы сайдбар закрывается")
             .waitForExist("[role='sphereDelete']", TIMEOUT)
                 .then(
-                    function(){selena.regActionResult("Кнопка удаления сферы доступна", 1)},
+                    function(){selena.regActionResult("Кнопка удаления сферы доступна. Кликаем на нее.", 1)},
                     function(e){selena.regActionResult("Кнопки удаления сферы не доступна " + e.message, 0, true)}
                 )
         .click("[role='sphereDelete']")
             .waitForExist("//*[contains(@class,'dialog-buttons')]", TIMEOUT)
                 .then(
-                    function(){selena.regActionResult("Клик на кнопку удаления сферы: Диалог удаления сферы " + sphereName + " появился", 1)},
-                    function(e){selena.regActionResult("Клик на кнопку удаления сферы: Диалог удаления сферы " + sphereName + " не появился " + e.message, 0, true)}
+                    function(){selena.regActionResult("Диалог подтверждения удаления сферы " + sphereName + " появился. Нажимаем пробел.", 1)},
+                    function(e){selena.regActionResult("Диалог подтверждения удаления сферы " + sphereName + " не появился. " + e.message, 0, true)}
                 )
         .keys(["Space"])
             .waitForExist("//*[contains(@class,'dialog-buttons')]", TIMEOUT, true)
                     .then(
-                        function(){selena.regActionResult("Нажатие пробела: Диалог удаления сферы " + sphereName + " закрылся", 1)},
-                        function(e){selena.regActionResult("Нажатие пробела: Диалог удаления сферы " + sphereName + " не закрылся " + e.message, 0, true)}
+                        function(){selena.regActionResult("Диалог удаления сферы " + sphereName + " закрылся. Переключаемся во второй таб.", 1)},
+                        function(e){selena.regActionResult("Диалог удаления сферы " + sphereName + " не закрылся. " + e.message, 0, true)}
                     )
         .keys(["Escape"])
         .switchTabAndCallback(tabMap.second)
-        .sphereListOpen("Открытие сайдбара для проверки наличия сферы")
+        .sphereListOpen("Открываем сайдбар для проверки наличия сферы")
             .waitForExist("//*[@role='sphereName'][contains(text(),'" + sphereName + "')]", TIMEOUT, true)
                 .then(
-                    function(){selena.regActionResult("Сфера " + sphereName + " удалена (пропала в списке сфер)", 1)},
-                    function(e){selena.regActionResult("Сфера " + sphereName + " не удалена (не пропала в списке сфер)" + e.message, 0, true)}
+                    function(){selena.regActionResult("Сфера " + sphereName + " удалена (отсутсвует в списке сфер)", 1)},
+                    function(e){selena.regActionResult("Сфера " + sphereName + " не удалена (присутствует в списке сфер)" + e.message, 0, true)}
                 )
         .keys(["Escape"])
         .switchTabAndCallback(tabMap.first)
@@ -155,8 +155,8 @@ testModule.tests.taskDDOpenTest = {
         .moveToObject("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]")
             .waitForVisible("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]/../../../*[@role='menuButton']", TIMEOUT)
                 .then(
-                    function(){selena.regActionResult("Наведение на карточку " + taskName + " и появление кнопки •••.", 1)},
-                    function(e){selena.regActionResult("Не появилась кнопка (•••) параметров (меню) карточки " + taskName + " " + e.message, 0, true)}
+                    function(){selena.regActionResult("Наводим на карточку " + taskName + " и ждем появление кнопки •••.", 1)},
+                    function(e){selena.regActionResult("При наведенении на карточку " + taskName + " не появилась кнопка (•••) параметров (меню) карточки " + taskName + " " + e.message, 0, true)}
                 )
         .click("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]/../../../*[@role='menuButton']")
             .waitForVisible("[role='menuDropdown']", TIMEOUT)

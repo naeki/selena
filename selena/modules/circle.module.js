@@ -2,7 +2,7 @@ var selena = require("../clientExtended");
 
 // Test module
 testModule = {
-  name : "Circle",
+  name : "checkCircle",
   call : function(){
     return this
       .circleRename(circleNameBefore, circleNameAfter)

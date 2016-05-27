@@ -2,17 +2,35 @@ var selena = require("../clientExtended");
 
 // Test module
 testModule = {
-    name : "Chat",
+    name : "checkChat",
     call : function(){
-    return this
-        .chatMessageWriteDraft(taskName, chatMessage)
-        .chatMessageSend(taskName, chatMessage)
-        .chatChildArchiveExtract(taskName)
-        .chatChildDeleteRecover(taskName)
-        .chatMessageEdit(taskName, MESSAGE1, MESSAGE2)
-        .chatHistoryCardCreate(taskName, chatMessage)
-        .chatHistoryMessageDelete(taskName, chatMessage)
-        ;
+        
+        selena.addFunction(this, "chatHistoryMessageDDOpen", function(chatMessage, DDItem) {
+            DDItem || (DDItem = "Клик на индикаторе. Контекстное меню открылось.");
+            return this
+
+            .waitForVisible(".message_fadein", TIMEOUT, true)
+            .moveToObject("//*[@role='messageHistory' and contains(text(),'" + chatMessage + "')]")
+            .waitForVisible("[role='messageSettings']", TIMEOUT).then(
+                function(){selena.regActionResult("Наводим на сообщение: Индикатор для вызова контекстного меню с настройками появился", 1)},
+                function(e){selena.regActionResult("Наводим на сообщение: Индикатор для вызова контекстного меню с настройками не появился " + e.message, 0, true)}
+            )
+            .click("[role='messageSettings']")
+            .waitForVisible("//*[@role='dropdown']//*[@title='" + DDItem + "']", TIMEOUT).then(
+                function(){selena.regActionResult("Клик на индикаторе. Контекстное меню открылось. Пункт " + DDItem + " доступен", 1)},
+                function(e){selena.regActionResult("Клик на индикаторе. Контекстное меню не открылось или пункт " + DDItem + " отсутствует. " + e.message, 0, true)}
+            )
+        }, true);
+
+        return this
+            .chatMessageWriteDraft(taskName, chatMessage)
+            .chatMessageSend(taskName, chatMessage)
+            .chatChildArchiveExtract(taskName)
+            .chatChildDeleteRecover(taskName)
+            .chatMessageEdit(taskName, MESSAGE1, MESSAGE2)
+            .chatHistoryCardCreate(taskName, chatMessage)
+            .chatHistoryMessageDelete(taskName, chatMessage)
+            ;
     },
     setup : function(){
       return this
@@ -203,37 +221,33 @@ testModule.tests.chatMessageEdit = {
     
     .keys(chatMessageBefore)
     .keys(["Enter"])
-        .waitForVisible("//*[@role='messageHistory' and contains(text(),'" + chatMessageBefore + "')]", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Сообщение " + chatMessageBefore + " отправлено и появилось в истории карточки " + taskName, 1)},
-                function(e){selena.regActionResult("Сообщение " + chatMessageBefore + " не появилось в истории карточки " + taskName + "", e.message, 0)}
-            )
+    .waitForVisible("//*[@role='messageHistory' and contains(text(),'" + chatMessageBefore + "')]", TIMEOUT).then(
+        function(){selena.regActionResult("Сообщение " + chatMessageBefore + " отправлено и появилось в истории карточки " + taskName, 1)},
+        function(e){selena.regActionResult("Сообщение " + chatMessageBefore + " не появилось в истории карточки " + taskName + "", e.message, 0)}
+    )
 
     .chatHistoryMessageDDOpen(chatMessageBefore, "Edit")
     
     .click("//*[@role='dropdown']//*[@title='Edit']")
-        .waitForVisible("//*[@contenteditable='true' and contains(text(),'" + chatMessageBefore + "')]", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Клик на пункте Edit. Редактирование сообщения " + chatMessageBefore + " активировалось.", 1)},
-                function(e){selena.regActionResult("Клик на пункте Edit. Редактирование сообщения " + chatMessageBefore + " не активировалось.", e.message, 0)}
-            )
+    .waitForVisible("//*[@contenteditable='true' and contains(text(),'" + chatMessageBefore + "')]", TIMEOUT).then(
+        function(){selena.regActionResult("Клик на пункте Edit. Редактирование сообщения " + chatMessageBefore + " активировалось.", 1)},
+        function(e){selena.regActionResult("Клик на пункте Edit. Редактирование сообщения " + chatMessageBefore + " не активировалось.", e.message, 0)}
+    )
     .click("//*[@role='messageHistory' and contains(text(),'" + chatMessageBefore + "')]")
     .keys(chatMessageAfter)
     .keys(["Enter"])
     .keys(["Enter"])
-        .waitForVisible("//*[@contenteditable='true' and contains(text(),'" + chatMessageBefore + "')]", TIMEOUT, true)
-            .then(
-                function(){selena.regActionResult("Ввод " + chatMessageAfter + ". Сообщение " + chatMessageBefore + chatMessageAfter + " сохранилось.", 1)},
-                function(e){selena.regActionResult("Ввод " + chatMessageAfter + ". Сообщение " + chatMessageBefore + chatMessageAfter + " не сохранилось.", e.message, 0)}
-            )
+    .waitForVisible("//*[@contenteditable='true' and contains(text(),'" + chatMessageBefore + "')]", TIMEOUT, true).then(
+        function(){selena.regActionResult("Ввод " + chatMessageAfter + ". Сообщение " + chatMessageBefore + chatMessageAfter + " сохранилось.", 1)},
+        function(e){selena.regActionResult("Ввод " + chatMessageAfter + ". Сообщение " + chatMessageBefore + chatMessageAfter + " не сохранилось.", e.message, 0)}
+    )
     
     .switchTabAndCallback(tabMap.second)
     .taskCardOpen(taskName)
-        .waitForVisible("//*[@role='messageHistory' and contains(text(),'" + chatMessageBefore + chatMessageAfter + "')]", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Проверка во втором табе: Отредактированное сообщение " + chatMessageBefore + chatMessageAfter + " сохранилось.", 1)},
-                function(e){selena.regActionResult("Проверка во втором табе: Отредактированное сообщение " + chatMessageBefore + chatMessageAfter + " не сохранилось.", e.message, 0)}
-            )
+    .waitForVisible("//*[@role='messageHistory' and contains(text(),'" + chatMessageBefore + chatMessageAfter + "')]", TIMEOUT).then(
+        function(){selena.regActionResult("Проверка во втором табе: Отредактированное сообщение " + chatMessageBefore + chatMessageAfter + " сохранилось.", 1)},
+        function(e){selena.regActionResult("Проверка во втором табе: Отредактированное сообщение " + chatMessageBefore + chatMessageAfter + " не сохранилось.", e.message, 0)}
+    )
     .keys(["Escape"])
     
     .switchTabAndCallback(tabMap.first)
@@ -250,29 +264,26 @@ testModule.tests.chatHistoryCardCreate = {
     
     .keys(chatMessage)
     .keys(["Enter"])
-        .waitForVisible("//*[@role='messageHistory' and contains(text(),'" + chatMessage + "')]", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Сообщение " + chatMessage + " отправлено и появилось в истории карточки " + taskName, 1)},
-                function(e){selena.regActionResult("Сообщение " + chatMessage + " не появилось в истории карточки " + taskName + "", e.message, 0)}
-            )
+    .waitForVisible("//*[@role='messageHistory' and contains(text(),'" + chatMessage + "')]", TIMEOUT).then(
+        function(){selena.regActionResult("Сообщение " + chatMessage + " отправлено и появилось в истории карточки " + taskName, 1)},
+        function(e){selena.regActionResult("Сообщение " + chatMessage + " не появилось в истории карточки " + taskName + "", e.message, 0)}
+    )
 
     .chatHistoryMessageDDOpen(chatMessage, "New card")
     
     .click("//*[@role='dropdown']//*[@title='New card']")
-        .waitForVisible("//*[@role='cardTitle' and contains(text(),'" + chatMessage + "')]", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Клик на пункте New Card. Новой карточка с тайтлом " + chatMessage + " создалась.", 1)},
-                function(e){selena.regActionResult("Клик на пункте New Card. Новой карточка с тайтлом " + chatMessage + " не создалась.", e.message, 0)}
-            )
+    .waitForVisible("//*[@role='cardTitle' and contains(text(),'" + chatMessage + "')]", TIMEOUT).then(
+        function(){selena.regActionResult("Клик на пункте New Card. Новой карточка с тайтлом " + chatMessage + " создалась.", 1)},
+        function(e){selena.regActionResult("Клик на пункте New Card. Новой карточка с тайтлом " + chatMessage + " не создалась.", e.message, 0)}
+    )
     .keys(["Escape"])
     
     .switchTabAndCallback(tabMap.second)
     .taskCardOpen(taskName)
-        .waitForVisible("//*[@role='title' and contains(text(),'" + chatMessage + "')]", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Проверка во втором табе: Карточка " + chatMessage + " в чате родителя " + taskName + " найдена.", 1)},
-                function(e){selena.regActionResult("Проверка во втором табе: Карточка " + chatMessage + " в чате родителя " + taskName + " не найдена.", e.message, 0)}
-            )
+    .waitForVisible("//*[@role='title' and contains(text(),'" + chatMessage + "')]", TIMEOUT).then(
+        function(){selena.regActionResult("Проверка во втором табе: Карточка " + chatMessage + " в чате родителя " + taskName + " найдена.", 1)},
+        function(e){selena.regActionResult("Проверка во втором табе: Карточка " + chatMessage + " в чате родителя " + taskName + " не найдена.", e.message, 0)}
+    )
     .keys(["Escape"])
     
     .switchTabAndCallback(tabMap.first)
@@ -289,11 +300,10 @@ testModule.tests.chatHistoryMessageDelete = {
     
     .keys(chatMessage)
     .keys(["Enter"])
-        .waitForVisible("//*[@role='messageHistory' and contains(text(),'" + chatMessage + "')]", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Сообщение " + chatMessage + " отправлено и появилось в истории карточки " + taskName, 1)},
-                function(e){selena.regActionResult("Сообщение " + chatMessage + " не появилось в истории карточки " + taskName + "", e.message, 0)}
-            )
+    .waitForVisible("//*[@role='messageHistory' and contains(text(),'" + chatMessage + "')]", TIMEOUT).then(
+        function(){selena.regActionResult("Сообщение " + chatMessage + " отправлено и появилось в истории карточки " + taskName, 1)},
+        function(e){selena.regActionResult("Сообщение " + chatMessage + " не появилось в истории карточки " + taskName + "", e.message, 0)}
+    )
 
     .chatHistoryMessageDDOpen(chatMessage, "Remove")
     
@@ -301,11 +311,10 @@ testModule.tests.chatHistoryMessageDelete = {
     
     .switchTabAndCallback(tabMap.second)
     .taskCardOpen(taskName)
-        .waitForVisible("[class*='deleted']", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Проверка по втором окне. Сообщение " + chatMessage + " удалено.", 1)},
-                function(e){selena.regActionResult("Проверка по втором окне. Сообщение " + chatMessage + " не удалено.", e.message + "\n" + e.stack)}
-            )
+    .waitForVisible("[class*='deleted']", TIMEOUT).then(
+        function(){selena.regActionResult("Проверка по втором окне. Сообщение " + chatMessage + " удалено.", 1)},
+        function(e){selena.regActionResult("Проверка по втором окне. Сообщение " + chatMessage + " не удалено.", e.message + "\n" + e.stack)}
+    )
     .keys(["Escape"])
     
     .switchTabAndCallback(tabMap.first)

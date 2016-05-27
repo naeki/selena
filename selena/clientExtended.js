@@ -3,6 +3,8 @@ var selena = {};
 
 selena.addModule = function(client, module){
     // Command for module excution
+    
+    
 
     client.addCommand(module.name, function(){
 
@@ -50,10 +52,14 @@ selena.addModule = function(client, module){
         }, true);
 
 
+        console.log(module.tests)
 
         // Commands for tests execution
         for (var i in module.tests){
             var test = module.tests[i];
+            
+//            console.log(module.name, module.tests);
+            
             selena.addTest(module, client, i, test);
         }
 
@@ -95,6 +101,10 @@ selena.addModule = function(client, module){
 
 
 selena.addTest = function(module, client, name, test){
+//    if(name === "loginEmptyFields") console.trace('addCommand');
+    
+    
+    
     client.addCommand(name, function(){
         var testResult = results["modules"][module.name]["tests"][name] = {message: test.message};
 
@@ -196,6 +206,25 @@ selena.regActionResult = function(message, result, skip){
         selena.skip = skip;
 }
 
+selena.defineNamespace = function(client, ns, methods){
+    
+    var wrappedMethods = {};
+    
+    for(var methodName in methods){
+        
+        wrappedMethods[methodName] = function(){
+            
+                
+            
+        }
+        
+    }
+    
+    client.addCommand(ns, function(){
+        
+    })
+    
+}
 
 
 

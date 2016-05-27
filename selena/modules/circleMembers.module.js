@@ -4,37 +4,37 @@ var selena = require("../clientExtended");
 // сделаны в одном окне, так как во второе окно не приходит email приглашенного. Проверять по другим критериям пока нет желания.
 
 testModule = {
-  name : "CircleMembers",
-  call : function(){
-    return this
-      .circleMemberInviteNew(circleName, MEMBERRANDOM)
-      .circleMemberInviteCurrent(circleName, LOGIN2)
-      .circleMemberDelete(circleName, LOGIN2)
-      .circleInviteCancel(circleName, LOGIN2)
-      .circleInviteAccept(circleName, LOGIN2)
-      .circleLeave(circleName, LOGIN2)
-      .circleMemberOwnerTransfer(circleName, LOGIN2) // ставить только последним тестом, чтобы после него была разавторизация, так как овнерство круга передано юзеру c LOGIN2.
-      ;  
+    name : "checkCircleMembers",
+    call : function(){
+        return this
+            .circleMemberInviteNew(circleName, MEMBERRANDOM)
+            .circleMemberInviteCurrent(circleName, LOGIN2)
+            .circleMemberDelete(circleName, LOGIN2)
+            .circleInviteCancel(circleName, LOGIN2)
+            .circleInviteAccept(circleName, LOGIN2)
+            .circleLeave(circleName, LOGIN2)
+            .circleMemberOwnerTransfer(circleName, LOGIN2) // ставить только последним тестом, чтобы после него была разавторизация, так как овнерство круга передано юзеру c LOGIN2.
+    ;  
     },
     setup : function(){
-      return this
-        .loginCorrect(LOGIN1, PASS)
-        .secondWindow()
-        ;
+        return this
+            .loginCorrect(LOGIN1, PASS)
+            .secondWindow()
+    ;
     },
     clean : function(){
-      return this
-        .logout()
+        return this
+            .logout()
     },
 
     testSetup : function(){
-      return this
-        .circleListOpen()
-        .circleCreateNew(circleName)
+        return this
+            .circleListOpen()
+            .circleCreateNew(circleName)
     },
     testClean : function(){
-      return this
-        .circleDeleteAll()
+        return this
+            .circleDeleteAll()
     },
 
     tests : {}
@@ -47,27 +47,23 @@ testModule.tests.circleMemberInviteNew = {
       .circleListOpen()
       .circleSettingsOpen(circleName)
       .click("[role='addUser']")
-        .waitForExist("[role='findUser']", TIMEOUT)
-          .then(
+        .waitForExist("[role='findUser']", TIMEOUT).then(
             function(){selena.regActionResult("Панель поиска пользователей активирована. Ищем " + memberLogin, 1)},
             function(e){selena.regActionResult("Панель поиска пользователей не активирована " + e.message, 0, true)}
           )
       .setValue("[role='findUser']", memberLogin)
-        .waitForExist("[role='userInvite']", TIMEOUT)
-          .then(
+        .waitForExist("[role='userInvite']", TIMEOUT).then(
             function(){selena.regActionResult(memberLogin + " не найден среди существующих. Приглашаем. ", 1)},
             function(e){selena.regActionResult(memberLogin + " найден среди существующих пользователей " + e.message, 0, true)} // подумать над формулировкой
           )
       .click("[role='userInvite']")
-        .waitForExist("[role='userInviteName']", TIMEOUT)
-          .then(
+        .waitForExist("[role='userInviteName']", TIMEOUT).then(
             function(){selena.regActionResult("Панель для ввода имени нового юзера появилась. Вводим " + memberLogin, 1)},
             function(e){selena.regActionResult("Панель для ввода имени нового юзера не появилась " + e.message, 0)}
           )
       .setValue("[role='userInviteName']", memberLogin)
       .keys(["Enter"])
-        .waitForExist("//*[@role='email'][contains(text(),'" + memberLogin + "')]", TIMEOUT)
-          .then(
+        .waitForExist("//*[@role='email'][contains(text(),'" + memberLogin + "')]", TIMEOUT).then(
             function(){selena.regActionResult("Незарегистированный юзер " + memberLogin + " приглашен в круг " + circleName, 1)},
             function(e){selena.regActionResult("Незарегистированный юзер " + memberLogin + " не приглашен в круг " + circleName + " " + e.message, 0)}
           )

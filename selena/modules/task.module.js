@@ -2,8 +2,26 @@ var selena = require("../clientExtended");
 
 // Test module
 testModule = {
-    name : "Task",
+    name : "checkTask",
     call : function(){
+        
+        selena.addFunction(this, "task_check", function(role) {
+            return this
+                .waitForVisible("[role='" + role + "']", TIMEOUT)
+                    .then(
+                        function(){selena.regActionResult("Пункт " + role + " присутствует в карточке", 1)},
+                        function(e){selena.regActionResult("Пункт " + role + " отсутствует в карточке " + e.message, 0, true)}
+                    )
+        }, true);
+        
+        selena.addFunction(this, "task_click", function(role) {
+            return this
+                .click("[role='" + role + "']")
+                    .then(
+                          function(){selena.regActionResult("Клик на пункт " + role + " в контектном меню", 1)}
+                    )
+        }, true);
+        
     return this
         .taskRename(taskNameBefore, taskNameAfter)
         .taskDeleteRecover(taskName)
@@ -76,17 +94,9 @@ testModule.tests.taskDeleteRecover = {
     return this
         
     .taskCardOpen(taskName)
-        .waitForVisible("[role='delete']", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Пункт Delete присутствует в карточке", 1)},
-                function(e){selena.regActionResult("Пункт Delete отсутствует в карточке " + e.message, 0, true)}
-            )
-    .click("[role='delete']")
-        .waitForVisible("[role='recover']", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Проверка в первом табе: Пункт Delete сменился на Recover" , 1)},
-                function(e){selena.regActionResult("Проверка в первом табе: Пункт Delete не сменился на Recover " + e.message, 0, true)}
-            )
+    .task_check('delete')
+    .task_click('delete')
+    .task_check('recover')
     
     .switchTabAndCallback(tabMap.second)
         .waitForExist("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]", TIMEOUT, true)
@@ -96,12 +106,8 @@ testModule.tests.taskDeleteRecover = {
             )
     
     .switchTabAndCallback(tabMap.first)
-    .click("[role='recover']")
-        .waitForVisible("[role='delete']", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Проверка в первом табе: Пункт Recover сменился на Delete" , 1)},
-                function(e){selena.regActionResult("Проверка в первом табе: Пункт Recover не сменился на Delete " + e.message, 0, true)}
-            )
+    .task_click('recover')
+    .task_check('delete')
     .keys(["Escape"])
     
     .switchTabAndCallback(tabMap.second)
@@ -123,17 +129,9 @@ testModule.tests.taskArchiveExtract = {
     return this
         
     .taskCardOpen(taskName)
-        .waitForVisible("[role='archive']", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Пункт Archive присутствует в карточке", 1)},
-                function(e){selena.regActionResult("Пункт Archive отсутствует в карточке " + e.message, 0, true)}
-            )
-    .click("[role='archive']")
-        .waitForVisible("[role='extract']", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Проверка в первом табе: Пункт Archive сменился на Archive" , 1)},
-                function(e){selena.regActionResult("Проверка в первом табе: Пункт Archive не сменился на Archive " + e.message, 0, true)}
-            )
+    .task_check('archive')
+    .task_click('archive')
+    .task_check('extract')
     
     .switchTabAndCallback(tabMap.second)
         .waitForExist("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]", TIMEOUT, true)
@@ -143,12 +141,8 @@ testModule.tests.taskArchiveExtract = {
             )
     
     .switchTabAndCallback(tabMap.first)
-    .click("[role='extract']")
-        .waitForVisible("[role='archive']", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Проверка в первом табе: Пункт Extract сменился на Archive" , 1)},
-                function(e){selena.regActionResult("Проверка в первом табе: Пункт Extract не сменился на Archive " + e.message, 0, true)}
-            )
+    .task_click('extract')
+    .task_check('archive')
     .keys(["Escape"])
     
     .switchTabAndCallback(tabMap.second)

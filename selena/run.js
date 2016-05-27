@@ -1,6 +1,7 @@
 
 
-var webdriverio = require('webdriverio');
+var webdriverio = require('webdriverio')
+    ;
     
     // URL = 'http://tm.hub-head.com/',
     global.LOGIN1 = 'vadim+0001@levelup.ru';
@@ -36,31 +37,26 @@ var webdriverio = require('webdriverio');
     global.tagNameNew = tagName;
     global.tagNameOld = 'TAG1';
 
-//    TASK1 = 'TASK-FOR-UNFOLLOW',
-//    TASK2 = 'TASK-FOR-DELETE',
-//    TASK3 = 'TASK3',
-//    TASK4 = 'TASK-FOR-ARCHIVE',
-//    TASK5 = 'TASK-FOR-RENAME',
-//    TASK6 = 'RENAMED-TASK',
-//    task_names = [TASK1, TASK2, TASK3, TASK4, TASK5],
-//    TAG1 = 'TAG1',
-//    i = 0,
-//    SCREENSHOTPATH = '/Users/vadimnechaev/Desktop/',
-//    MESSAGE = 'Сообщение'
 ;
 
-var options = {
+/*var options = {
     desiredCapabilities: {
-      browserName: 'firefox'
-    },
-    logLevel: 'silent'
-};
+        browserName: 'firefox'
+    }
+};*/
 
 
 
 
 // Service
-var client = webdriverio.remote(options);
+//var client = webdriverio.remote(options);
+var client = webdriverio.multiremote({
+        browserA: { desiredCapabilities: { browserName: 'firefox' } },
+        browserB: { desiredCapabilities: { browserName: 'firefox' } }
+    }),
+    browserA = client.select('browserA'),
+    browserB = client.select('browserB');
+    
 var selena = require("./clientExtended");
 var results = require("./results");
 
@@ -68,8 +64,6 @@ var results = require("./results");
 
 var fn = require("./functions");
 for (var i in fn){client.addCommand(i, fn[i])} // можно переделать, где-то там создавать команды сразу
-
-
 
 
 // Global Setup & Clean
@@ -92,15 +86,16 @@ client.addCommand("sendResults", function(){
 
 // Мы можем не просто добавлять подряд, а в сложном порядке. Сначала добавляем в массив, а уже потом ставим в некоторм порядке в колстек.
 // Modules
-selena.addModule(client, require("./modules/login.module"));              // checkLogin
-selena.addModule(client, require("./modules/basic.module"));              // checkBasic
-selena.addModule(client, require("./modules/circle.module"));             // checkCircle
-selena.addModule(client, require("./modules/circleMembers.module"));      // checkCircleMembers
-selena.addModule(client, require("./modules/sphere.module"));             // checkSphere
-selena.addModule(client, require("./modules/sphereContextMenu.module"));  // checkSphereContextMenu
-selena.addModule(client, require("./modules/task.module"));               // checkTask
-selena.addModule(client, require("./modules/taskContextMenu.module"));    // checkTaskContextMenu
-selena.addModule(client, require("./modules/chat.module"));               // checkChat
+selena.addModule(client, require("./modules/login.module"));              // Login
+selena.addModule(client, require("./modules/basic.module"));              // Basic
+selena.addModule(client, require("./modules/circle.module"));             // Circle
+selena.addModule(client, require("./modules/circleMembers.module"));      // CircleMembers
+//selena.addModule(client, require("./modules/circleMembersRights.module"));      // CircleMembersRights
+selena.addModule(client, require("./modules/sphere.module"));             // Sphere
+selena.addModule(client, require("./modules/sphereContextMenu.module"));  // SphereContextMenu
+selena.addModule(client, require("./modules/task.module"));               // Task
+selena.addModule(client, require("./modules/taskInTree.module"));    // TaskContextMenu
+selena.addModule(client, require("./modules/chat.module"));               // Chat
 
 
 
@@ -121,31 +116,32 @@ client.addCommand("modulesCall", function(){
 
 
 client
-  .globalSetup().then(
-    function(){
-      results["setup"] = 1;
-      return this
-        .checkLogin()
-        .checkBasic()
-        .checkCircle()
-        .checkCircleMembers()
-        .checkSphere()
-        .checkSphereContextMenu()
-        .checkTask()
-        .checkTaskContextMenu()
-        .checkChat()
+    .globalSetup().then(
+        function(){
+            results["setup"] = 1;
+            return this
+                .checkLogin()
+//                .checkBasic()
+//                .checkCircle()
+//                .checkCircleMembers()
+//                .checkCircleMembersRights()
+//                .checkSphere()
+//                .checkSphereContextMenu()
+//                .checkTask()
+//                .checkTaskInTree()
+//                .checkChat()
         ;    
-      },
-      function(err){
-        results["setup"] = 0;
-      }
-  )
-  .globalClean().then(
-    function(){
-      results["clean"] = 1;
-    },
-    function(){
-      results["clean"] = 0;
-    }
-  )
-  .sendResults();
+        },
+        function(err){
+            results["setup"] = 0;
+        }
+    )
+    .globalClean().then(
+        function(){
+            results["clean"] = 1;
+        },
+        function(){
+            results["clean"] = 0;
+        }
+    )
+    .sendResults();

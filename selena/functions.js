@@ -65,11 +65,10 @@ fn.pageRefresh = function() {
     return this
     .pause(500)
     .refresh()
-        .waitForVisible("[role='circlesButton']", TIMEOUT)
-            .then(
-            function(){selena.regActionResult("Рефреш страницы ", 1)},
-            function(e){selena.regActionResult("Рефреш страницы " + e.message, 0, true)}
-        );
+    .waitForVisible("[role='circlesButton']", TIMEOUT).then(
+        function(){selena.regActionResult("Рефреш страницы ", 1)},
+        function(e){selena.regActionResult("Рефреш страницы " + e.message, 0, true)}
+    );
 };
 
 fn.login = function(email, pass) {
@@ -93,56 +92,51 @@ fn.login = function(email, pass) {
 };
 
 fn.loginCorrect = function(email, pass) {
-  return this
+    return this
     .login(email, pass)
-      .waitForVisible("[role='mainButton']", TIMEOUT)
-        .then(
-          function(){
-            selena.regActionResult("Успешая авторизация и открытие системы (появление кнопки '+')", 1)
-          },
-          function(e){
-            selena.regActionResult("Завис прелоадер (не подключился сокет) " + e.message, 0);
+    .waitForVisible("[role='mainButton']", TIMEOUT).then(
+        function(){
+        selena.regActionResult("Успешая авторизация и открытие системы (появление кнопки '+')", 1)
+        },
+        function(e){
+        selena.regActionResult("Завис прелоадер (не подключился сокет) " + e.message, 0)
+        
             return this
-              .pageRefresh()
-              .waitForVisible("[role='mainButton']", TIMEOUT)
-                .then(
-                  function(){selena.regActionResult("Успешая авторизация и открытие системы (появление кнопки '+')", 1)},
-                  function(e){selena.regActionResult("Второй раз зависший прелоадер " + e.message, 0, true)}
-                )
-          })
+            .pageRefresh()
+            .waitForVisible("[role='mainButton']", TIMEOUT).then(
+                function(){selena.regActionResult("Успешая авторизация и открытие системы (появление кнопки '+')", 1)},
+                function(e){selena.regActionResult("Второй раз зависший прелоадер " + e.message, 0, true)}
+            )
+    })
 
     .pause(500)
 };
 
 fn.logout = function() {
-  return this
+    return this
     .circleListOpen()
     .click(".logout-button")
-      .waitForExist(".login-button", TIMEOUT)
-        .then(
-          function(){selena.regActionResult("Логаут и появления формы авторизации", 1)},
-          function(e){selena.regActionResult("Логаут и появления формы авторизации " + e.message, 0, true)}
-        )
+    .waitForExist(".login-button", TIMEOUT).then(
+        function(){selena.regActionResult("Логаут и появления формы авторизации", 1)},
+        function(e){selena.regActionResult("Логаут и появления формы авторизации " + e.message, 0, true)}
+    )
 };
 
 fn.circleListOpen = function() {
-  var message = arguments[0] || "Список кругов открылся";
-  return this
+    var message = arguments[0] || "Список кругов открылся";
+    return this
     .QCLOpen()
-      .waitForVisible("[role='circlesButton']", TIMEOUT)
-        .then(
-          null
-//          function(){selena.regActionResult("Кнопка открытия списка кругов доступна. Кликаем.", 1)}
-          ,
-          function(e){selena.regActionResult("Кнопка открытия списка кругов не доступна " + e.message, 0)}
-        )
+    .waitForVisible("[role='circlesButton']", TIMEOUT).then(
+        null
+        //          function(){selena.regActionResult("Кнопка открытия списка кругов доступна. Кликаем.", 1)}
+        ,
+        function(e){selena.regActionResult("Кнопка открытия списка кругов не доступна " + e.message, 0)}
+    )
     .click("[role='circlesButton']")
-      .waitForVisible("[role='circleCreateButton']", TIMEOUT)
-        .then(
-          function(){selena.regActionResult(message, 1)},
-          function(e){selena.regActionResult("Список кругов не открылся. " + e.message, 0, true);
-          }
-        )
+    .waitForVisible("[role='circleCreateButton']", TIMEOUT).then(
+        function(){selena.regActionResult(message, 1)},
+        function(e){selena.regActionResult("Список кругов не открылся. " + e.message, 0, true)}
+    )
 }
 
 fn.circleSettingsOpen = function(circleName) {
@@ -161,20 +155,20 @@ fn.circleSettingsOpen = function(circleName) {
 }
 
 fn.circleCreateNew = function(circleName) {
-  return this
+    return this
     .click("[role='circleCreateButton']")
-      .waitForVisible("[role='newCircleName']", TIMEOUT)
-//        .then(
-//          function(){selena.regActionResult("Открытие формы создания нового круга", 1)},
-//          function(e){selena.regActionResult("Открытие формы создания нового круга " + e.message, 0, true)}
-//        )
+    .waitForVisible("[role='newCircleName']", TIMEOUT)
+    //        .then(
+    //          function(){selena.regActionResult("Открытие формы создания нового круга", 1)},
+    //          function(e){selena.regActionResult("Открытие формы создания нового круга " + e.message, 0, true)}
+    //        )
     .setValue("[role='newCircleName']", circleName)    
     .click("[role='newCircleSave']")
-      .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT)
-        .then(
-          function(){selena.regActionResult("Круг " + circleName + " создан", 1)},
-          function(e){selena.regActionResult("Круг " + circleName + " не создан " + e.message, 0, true)}
-        );
+    .waitForExist("//*[@role='circleName'][contains(text(),'" + circleName + "')]", TIMEOUT).then(
+        function(){selena.regActionResult("Круг " + circleName + " создан", 1)},
+        function(e){selena.regActionResult("Круг " + circleName + " не создан " + e.message, 0, true)}
+    )
+    .keys(["Escape"]);
 }
 
 fn.circleDelete = function(circleName) {
@@ -184,8 +178,7 @@ fn.circleDelete = function(circleName) {
   .click("[role='circleDelete']")
   .keys(["Space"])
   .circleListOpen()
-    .isExisting("//*[@role='circleName' and contains(text(),'" + circleName + "')]", TIMEOUT)
-      .then(
+    .isExisting("//*[@role='circleName' and contains(text(),'" + circleName + "')]", TIMEOUT).then(
         function(){selena.regActionResult("Круг " + circleName + " удален ", 1)},
         function(e){selena.regActionResult("Круг " + circleName + " не удален " + e.message, 0, true)}
       );
@@ -201,8 +194,7 @@ fn.circleMemberInvite = function(circleName, memberLogin) {
   .setValue("[role='findUser']", memberLogin)
     .waitForExist("//*[@role='userEmail'][contains(text(),'" + memberLogin + "')]", TIMEOUT)
   .click("//*[@role='userEmail'][contains(text(),'" + memberLogin + "')]")
-    .waitForExist("//*[@role='email'][contains(text(),'" + memberLogin + "')]", TIMEOUT)
-      .then(
+    .waitForExist("//*[@role='email'][contains(text(),'" + memberLogin + "')]", TIMEOUT).then(
         function(){selena.regActionResult("Зарегистрированный юзер " + memberLogin + " приглашен в круг " + circleName, 1)},
         function(e){selena.regActionResult("Зарегистрированный юзер " + memberLogin + " не приглашен в круг " + circleName + " " + e.message, 0)}
       )
@@ -213,55 +205,52 @@ fn.circleMemberInvite = function(circleName, memberLogin) {
 fn.QCLOpen = function() {
     return this
     .moveToObject("[role='mainButton']")
-        .waitForVisible("[role='createSphere']", TIMEOUT)
-            .then(
-                null
+    .waitForVisible("[role='createSphere']", TIMEOUT).then(
+        null
 //                function(){selena.regActionResult("Наведение на «+» и появление кнопок создания сферы/карточек", 1)}
-                ,
-                function(e){selena.regActionResult("Наведение на «+» и появление кнопок создания сферы/карточек " + e.message, 0, true)}
-            );
+        ,
+        function(e){selena.regActionResult("Наведение на «+» и появление кнопок создания сферы/карточек " + e.message, 0, true)}
+    )
+    ;
 }
 
 fn.sphereListOpen = function() {
-  var message = arguments[0] || "Список сфер открылся";
-  return this
-      .waitForVisible("[role='spheresListButton']", TIMEOUT)
-        .then(
+    var message = arguments[0] || "Открываем список сфер";
+    return this
+    .waitForVisible("[role='spheresListButton']", TIMEOUT).then(
         null/*function(){selena.regActionResult("Кнопка открытия списка сфер доступна. Кликаем.", 1)}*/,
         function(e){selena.regActionResult("Кнопка открытия списка сфер не доступна " + e.message, 0, true)}
-      )
+    )
     .click("[role='spheresListButton']")
-      .waitForExist("[role='sphereName']", TIMEOUT)
-        .then(
-          function(){selena.regActionResult(message, 1)},
-          function(e){selena.regActionResult("Список сфер не открылся " + e.message, 0, true)}
-        );
+    .waitForExist("[role='sphereName']", TIMEOUT).then(
+        function(){selena.regActionResult(message, 1)},
+        function(e){selena.regActionResult("Список сфер не открылся " + e.message, 0, true)}
+    )
+    ;
 }
  
 fn.sphereDDOpen = function(sphereName) {
-  return this
-    .waitForVisible("//*[@role='sphereName' and contains(text(),'" + sphereName + "')]", TIMEOUT)
-      .then(
+    return this
+    .waitForVisible("//*[@role='sphereName' and contains(text(),'" + sphereName + "')]", TIMEOUT).then(
         null/*function(){selena.regActionResult("Сфера присутствует " + sphereName + " в списке сфер", 1)}*/,
         function(e){selena.regActionResult("Сфера отсутствует " + sphereName + " в списке сфер " + e.message, 0, true)}
-      )
+    )
     .click("//*[@role='sphereName' and contains(text(),'" + sphereName + "')]/../../*[@role='sphereMenu']")
-      .waitForVisible("[title*='Settings']", TIMEOUT)
-        .then(
-          function(){selena.regActionResult("Контекстное меню сферы " + sphereName + " открылось", 1)},
-          function(e){selena.regActionResult("Контекстное меню сферы " + sphereName + " не открылось " + e.message, 0, true)}
-        );
+    .waitForVisible("[title*='Settings']", TIMEOUT).then(
+        function(){selena.regActionResult("Открываем контекстное меню сферы " + sphereName, 1)},
+        function(e){selena.regActionResult("Контекстное меню сферы " + sphereName + " не открылось " + e.message, 0, true)}
+    )
+    ;
 }
  
 fn.sphereSettingsOpen = function(sphereName) {
     return this
     .sphereDDOpen(sphereName)
     .click("[title*='Settings']")
-        .waitForVisible("//*[@role='sphereCard']//*[@role='sphereName' and contains(text(),'" + sphereName + "')]", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Настройки сферы " + sphereName + " открылись", 1)},
-                function(e){selena.regActionResult("Настройки сферы " + sphereName + " открылись " + e.message, 0, true)}
-            );
+    .waitForVisible("//*[@role='sphereCard']//*[@role='sphereName' and contains(text(),'" + sphereName + "')]", TIMEOUT).then(
+        function(){selena.regActionResult("Открываем настройки сферы " + sphereName, 1)},
+        function(e){selena.regActionResult("Настройки сферы " + sphereName + " открылись " + e.message, 0, true)}
+    );
 }
  
 fn.switchTabAndCallback = function(windowName) {
@@ -294,31 +283,28 @@ fn.sphereCreate = function(sphereName) {
         .waitForExist('.new-sphere-name', TIMEOUT)
     .setValue(".new-sphere-name", sphereName)
     .keys(["Enter"])
-        .waitForExist("//div[contains(text(),'" + sphereName + "')]", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Сфера " + sphereName + " создана", 1)},
-                function(e){selena.regActionResult("Сфера " + sphereName + " не создана  " + e.message, 0, true)}
-            )
-    
+    .waitForExist("//div[contains(text(),'" + sphereName + "')]", TIMEOUT).then(
+        function(){selena.regActionResult("Сфера " + sphereName + " создана", 1)},
+        function(e){selena.regActionResult("Сфера " + sphereName + " не создана  " + e.message, 0, true)}
+    )
     ;
 }
  
 fn.sphereDelete = function(sphereName) {
-  return this
-    .sphereSettingsOpen(sphereName)
-    .sphereListOpen()
-      .waitForExist("[role='sphereDelete']", TIMEOUT)
-    .click("[role='sphereDelete']")
-      .waitForExist("//*[contains(@class,'dialog-buttons')]", TIMEOUT)
-    .keys(["Space"])
-      .waitForExist("//*[@role='sphereName'][contains(text(),'" + sphereName + "')]", TIMEOUT, true)
-        .then(
-          function(){selena.regActionResult("Сфера " + sphereName + " удалена", 1)},
-          function(e){selena.regActionResult("Сфера " + sphereName + " не удалена " + e.message, 0, true)}
+    return this
+        .sphereSettingsOpen(sphereName)
+        .sphereListOpen()
+        .waitForExist("[role='sphereDelete']", TIMEOUT)
+        .click("[role='sphereDelete']")
+        .waitForExist("//*[contains(@class,'dialog-buttons')]", TIMEOUT)
+        .keys(["Space"])
+        .waitForExist("//*[@role='sphereName'][contains(text(),'" + sphereName + "')]", TIMEOUT, true).then(
+            function(){selena.regActionResult("Сфера " + sphereName + " удалена", 1)},
+            function(e){selena.regActionResult("Сфера " + sphereName + " не удалена " + e.message, 0, true)}
         )
-//    .keys(["Escape"])
-    
-  ;
+    //    .keys(["Escape"])
+
+    ;
 }
  
 fn.sphereDeleteAny = function() {
@@ -338,21 +324,19 @@ fn.sphereDeleteAny = function() {
 fn.sphereChatOpenCurrent = function() {
     return this
     .click("[role='chat-button']")
-        .waitForVisible("[role='sphereFocus']", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Чат текущей сферы открылся", 1)},
-                function(e){selena.regActionResult("Чат текущей сферы не открылся " + e.message, 0, true)}
-            )
+    .waitForVisible("[role='sphereFocus']", TIMEOUT).then(
+        function(){selena.regActionResult("Чат текущей сферы открылся", 1)},
+        function(e){selena.regActionResult("Чат текущей сферы не открылся " + e.message, 0, true)}
+    )
 }
 
 fn.notifListOpen = function() {
     return this
     .click("[role='notifListButton']")
-        .waitForVisible("[role='notifList']", TIMEOUT)
-            .then(
-            function(){selena.regActionResult("Список нотификейшенов открыт", 1)},
-            function(e){selena.regActionResult("Список нотификейшенов открыт " + e.message, 0, true)}
-        )
+    .waitForVisible("[role='notifList']", TIMEOUT).then(
+        function(){selena.regActionResult("Список нотификейшенов открыт", 1)},
+        function(e){selena.regActionResult("Список нотификейшенов открыт " + e.message, 0, true)}
+    )
 }
 
 fn.TaskCreateFormOpen = function() {
@@ -361,8 +345,8 @@ fn.TaskCreateFormOpen = function() {
         .click("[role='mainButton']")
             .waitForExist("[role='form']", TIMEOUT)
                 .then(
-                    function(){selena.regActionResult("Форма создания карточки открылась", 1)},
-                    function(e){selena.regActionResult("Форма создания карточки не открылась " + e.message, 0, true)}
+                    function(){selena.regActionResult("Открываем форму создания карточки", 1)},
+                    function(e){selena.regActionResult("Форма создания карточки не открылась. " + e.message, 0, true)}
                 )
 }
 
@@ -372,11 +356,10 @@ fn.taskCreate = function(taskName) {
         .TaskCreateFormOpen()
         .keys(taskName)
         .click("[role='mainButton']")
-            .waitForExist("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]", TIMEOUT)
-                .then(
-                function(){selena.regActionResult("Карточка " + taskName + " создана", 1)},
-                function(e){selena.regActionResult("Карточка " + taskName + " не создалась " + e.message, 0, true)}
-            )
+        .waitForExist("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]", TIMEOUT).then(
+            function(){selena.regActionResult("Создаем карточку " + taskName, 1)},
+            function(e){selena.regActionResult("Карточка " + taskName + " не создалась. " + e.message, 0, true)}
+        )
 }
 
 fn.taskDDOpen = function(taskName) {
@@ -384,11 +367,10 @@ fn.taskDDOpen = function(taskName) {
     .moveToObject("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]")
       .waitForVisible("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]/../../../*[@role='menuButton']", TIMEOUT)
     .click("//*[@role='task']//*[@role='title'][contains(text(),'" + taskName + "')]/../../../*[@role='menuButton']")
-      .waitForVisible("[role='menuDropdown']", TIMEOUT)
-        .then(
-          function(){selena.regActionResult("Контекстное меню карточки " + taskName + " открылось", 1)},
-          function(e){selena.regActionResult("Контекстное меню карточки " + taskName + " не открылось " + e.message, 0, true)}
-        )
+      .waitForVisible("[role='menuDropdown']", TIMEOUT).then(
+      function(){selena.regActionResult("Контекстное меню карточки " + taskName + " открылось", 1)},
+      function(e){selena.regActionResult("Контекстное меню карточки " + taskName + " не открылось " + e.message, 0, true)}
+    )
 }
 
 fn.taskDelete = function(taskName) {
@@ -478,25 +460,6 @@ fn.taskCardOpen = function(taskName) {
         )
 }
 
-fn.chatHistoryMessageDDOpen = function(chatMessage, DDItem) {
-    DDItem || (DDItem = "Клик на индикаторе. Контекстное меню открылось.");
-    return this
-    
-    .moveToObject("//*[@role='messageHistory' and contains(text(),'" + chatMessage + "')]")
-        .waitForVisible("[role='messageSettings']", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Наводим на сообщение: Индикатор для вызова контекстного меню с настройками появился", 1)},
-                function(e){selena.regActionResult("Наводим на сообщение: Индикатор для вызова контекстного меню с настройками не появился " + e.message, 0, true)}
-            )
-    .click("[role='messageSettings']")
-        .waitForVisible("//*[@role='dropdown']//*[@title='" + DDItem + "']", TIMEOUT)
-            .then(
-                function(){selena.regActionResult("Клик на индикаторе. Контекстное меню открылось. Пункт " + DDItem + " доступен", 1)},
-                function(e){selena.regActionResult("Клик на индикаторе. Контекстное меню не открылось или пункт " + DDItem + " отсутствует. " + e.message, 0, true)}
-            )
-}
-
-
 // client.addCommand("sessionEndAll", function() {
 //     console.log(" ");
 //     console.log("All Sessions is closed.");
@@ -504,6 +467,19 @@ fn.chatHistoryMessageDDOpen = function(chatMessage, DDItem) {
 //     return this
 //         .endAll();
 // })
+
+fn.contextMenu_check = function(title) {
+    return this
+        .waitForVisible("[title='" + title +"']", TIMEOUT).then(
+          function(){selena.regActionResult("Пункт " + title + " присутствует в контекстном меню", 1)},
+          function(e){selena.regActionResult("Пункт " + title + " отсутствует в контекстном меню " + e.message, 0, true)}
+        )
+}
+
+fn.contextMenu_click = function(title) {
+    return this
+        .click("[title='" + title + "']")
+}
 
 
 
