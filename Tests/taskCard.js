@@ -6,8 +6,7 @@ describe('Карточка', function () {
     
     before(function () {
         return client
-        .sessionStart()
-        .loginCorrect(LOGIN1, PASS)
+        .sessionStart().loginCorrect(LOGIN1, PASS)
         })
 
 

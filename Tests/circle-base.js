@@ -5,7 +5,6 @@ describe('Круг (базовые кейсы)', function() {
     
     before(function() {
         return client
-        .sessionStart()
         .loginCorrect(LOGIN1, PASS)
 		})
     

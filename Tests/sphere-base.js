@@ -4,9 +4,7 @@ describe('Сфера (базовые кейсы)', function () {
 		this.timeout(99999999);
     
     before(function () {
-        return client
-        .sessionStart()
-        .loginCorrect(LOGIN1, PASS)
+        return client.loginCorrect(LOGIN1, PASS)
 		})
     
     afterEach(function () {

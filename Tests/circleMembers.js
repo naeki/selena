@@ -3,9 +3,9 @@ client = require("../functions");
 describe('Круг (юзеры)', function() {
 		this.timeout(99999999);
     
-    before(function() {
+/*    before(function() {
         return client.sessionStart()
-    })
+    })*/
 
     afterEach('sync()', function() {
         return client.sync().pause(PAUSE)
