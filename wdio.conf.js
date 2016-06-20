@@ -36,8 +36,8 @@ exports.config = {
     // NPM script (see https://docs.npmjs.com/cli/run-script) then the current working
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
-/*    specs: [
-        'tests/**/*Test.js'
+    /*specs: [
+        'tests/**Test.js'
     ],*/
     // Patterns to exclude.
     // exclude: [
@@ -150,7 +150,7 @@ exports.config = {
     //     // The Jasmine framework allows it to intercept each assertion in order to log the state of the application
     //     // or website depending on the result. For example it is pretty handy to take a screenshot everytime
     //     // an assertion fails.
-    //     expectationResultHandler: function(passed, assertion) {
+    //     expectationResultHandler: function (passed, assertion) {
     //         // do something
     //     },
     //     //
